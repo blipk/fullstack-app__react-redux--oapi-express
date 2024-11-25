@@ -1,0 +1,37 @@
+body {
+    height: 100%;
+}
+
+.container-main {
+    padding: 0 0 0 10px;
+    margin: 10px 0 0 0;
+    max-width: 99vw;
+    max-height: 96vh;
+    grid-template-columns: minmax(0, max-content) minmax(0, 2.5fr) minmax(0, max-content);
+}
+
+.col-content {
+    overflow-x: hidden;
+    overflow-y: auto;
+    max-height: 96vh;
+}
+
+footer {
+    display: flex;
+    flex-direction: row-reverse;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    /* width: 100%; */
+    padding: 0.5rem 0 0.5rem 0rem;
+    border-top: 1px solid var(--color-accent);
+    border-left: 1px solid var(--color-accent);
+}
+
+footer > p {
+    margin: 0 0.5rem;
+}
+
+.tsd-navigation.settings {
+    margin: 0 0 1rem 0;
+}

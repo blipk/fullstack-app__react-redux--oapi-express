@@ -234,7 +234,7 @@ const securityFunctions: Record<AllModelNamesT, typeof defaultSecurityFunctions>
             getAll: `( authService: AuthService, request: ExpressRequest | undefined ) =>
         routeSecurityFunctions.adminOrFilters( authService, request, { isStaff: true } )`,
             getOne: `async ( authService: AuthService, request: ExpressRequest | undefined, modelObject: Model | object ) => {
-        await routeSecurityFunctions.adminOrHasProperty( authService, request, modelObject, { isStaff: true } ).catch(
+        await routeSecurityFunctions.adminOrHasProperty( authService, request, modelObject, { isStaff: true } )?.catch(
             async ( e: unknown ) => {
                 if ( e instanceof AuthError )
                     await routeSecurityFunctions.userIsAdminOrOwnsResource( authService, request, modelObject )
