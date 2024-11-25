@@ -1,0 +1,44 @@
+{
+    "entryFile": "src/index.ts",
+    "noImplicitAdditionalProperties": "throw-on-extras",
+    "controllerPathGlobs": ["./src/controllers/**/*Controller.ts"],
+
+    "spec": {
+        "basePath": "/",
+        "specFileBaseName": "openapi",
+        "outputDirectory": "./src/tsoa-build",
+        "specVersion": 3,
+        "securityDefinitions": {
+            "api_key": {
+                "type": "apiKey",
+                "name": "api_key",
+                "in": "query"
+            },
+            "oauth2": {
+                "type": "oauth2",
+                "tokenUrl": "/auth/login",
+                "flow": "password",
+                "scopes": {
+                    "admin": "modify things",
+                    "staff": "modify some things",
+                    "user": "read things"
+                }
+            }
+        }
+    },
+    "routes": {
+        "esm": true,
+        "bodyCoercion": true,
+        "basePath": "/",
+        "routesDir": "./src/tsoa-build",
+        "authenticationModule": "./src/auth/authMiddleware.ts",
+        "iocModule": "./src/controllers/ioc/inversifyContainer.ts"
+    },
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@/*": ["src/*"]
+        }
+    },
+    "ignore": ["**/node_modules/**", "./**/.pnpm/**/*"]
+}

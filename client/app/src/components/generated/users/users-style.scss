@@ -1,0 +1,151 @@
+/** UserView.tsx - Public Single Page */
+.user-view {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    height: 100%;
+    padding: 20px 0 0 0;
+
+    .user-view-header {
+        padding-bottom: 12px;
+
+        .user-view-navigation {
+            position: absolute;
+            top: 5em;
+            left: 4em;
+
+            button {
+                background: none;
+                border: none;
+            }
+
+            button:hover {
+                color: orangered;
+                translate: -1px 0px;
+            }
+        }
+    }
+
+    .user-content {
+        overflow: auto;
+        padding: 0 50px 0 50px;
+    }
+}
+
+/** UsersDisplay.tsx & UsersDisplayItem.tsx - Public Overview Page */
+.users-display {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    width: 100%;
+
+    margin-bottom: 40px;
+
+    .users-display-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        gap: 20px;
+    }
+    @media (max-width: 768px) {
+        .users-display-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            grid-template-rows: auto;
+            gap: 20px;
+        }
+    }
+
+    .users-display-item {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        border: 2px solid gainsboro;
+        border-radius: 10px;
+
+        width: auto;
+
+        margin: 0 10px 0 10px;
+
+        * {
+            // overflow: hidden;
+            // white-space: nowrap;
+            text-overflow: ellipsis;
+            max-width: 25vw;
+        }
+
+        @media (max-width: 768px) {
+            * {
+                max-width: 90vw;
+            }
+        }
+
+        .users-display-item-body {
+        }
+
+        .user-content-container {
+            .user-content {
+                white-space: wrap;
+                text-overflow: ellipsis;
+            }
+
+            .user-markdown {
+            }
+        }
+    }
+}
+
+/** UsersList.tsx & UsersListItem.tsx - Admin Page */
+.users-list-wrapper {
+    padding: 0 100px 0 100px;
+    .users-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .users-list-item-container {
+            .users-list-item-header h1 {
+                margin: 0;
+            }
+
+            .users-list-item {
+                display: flex;
+            }
+        }
+    }
+}
+
+/** Shared */
+.user-markdown {
+    text-overflow: ellipsis;
+    p {
+        text-align: left;
+        padding-bottom: 6px;
+        text-overflow: ellipsis;
+    }
+}
+
+.user-image {
+    max-width: 420px;
+    border-radius: 18px;
+    margin-top: 5px;
+    margin-right: 12px;
+
+    height: auto;
+}
+
+.user-image-preview {
+    max-width: 200px;
+    border-radius: 18px;
+    margin-top: 5px;
+    margin-right: 12px;
+
+    height: auto;
+}

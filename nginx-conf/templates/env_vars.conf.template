@@ -1,0 +1,6 @@
+# https://stackoverflow.com/questions/15416957/using-variables-in-nginx-location-rules/61513351#61513351
+# https://serverfault.com/questions/644892/nginx-set-variable-in-location
+
+map "" $api_port {
+  default "$API_PORT";
+}

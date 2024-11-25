@@ -1,0 +1,134 @@
+/** BookingTypeView.tsx - Public Single Page */
+.bookingType-view {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    height: 100%;
+    padding: 20px 0 0 0;
+
+    .bookingType-view-header {
+        padding-bottom: 12px;
+
+        .bookingType-view-navigation {
+            position: absolute;
+            top: 5em;
+            left: 4em;
+
+            button {
+                background: none;
+                border: none;
+            }
+
+            button:hover {
+                color: orangered;
+                translate: -1px 0px;
+            }
+        }
+    }
+
+    .bookingType-content {
+        overflow: auto;
+        padding: 0 50px 0 50px;
+    }
+}
+
+/** BookingTypesDisplay.tsx & BookingTypesDisplayItem.tsx - Public Overview Page */
+.bookingTypes-display {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    width: 100%;
+
+    margin-bottom: 40px;
+
+    .bookingTypes-display-item {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        border: 2px solid gainsboro;
+        border-radius: 10px;
+
+        width: auto;
+        width: 25vw;
+        max-width: 25vw;
+        height: 44vh;
+        max-height: 44vh;
+
+        margin: 0 10px 0 10px;
+
+        * {
+            // overflow: hidden;
+            // white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .bookingTypes-display-item-body {
+            height: 44vh;
+            max-height: 44vh;
+        }
+
+        .bookingType-content-container {
+            .bookingType-content {
+                white-space: wrap;
+                text-overflow: ellipsis;
+            }
+
+            .bookingType-markdown {
+            }
+        }
+    }
+}
+
+/** BookingTypesList.tsx & BookingTypesListItem.tsx - Admin Page */
+.bookingTypes-list-wrapper {
+    padding: 0 100px 0 100px;
+    .bookingTypes-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .bookingTypes-list-item-container {
+            .bookingTypes-list-item-header h1 {
+                margin: 0;
+            }
+
+            .bookingTypes-list-item {
+                display: flex;
+            }
+        }
+    }
+}
+
+/** Shared */
+.bookingType-markdown {
+    text-overflow: ellipsis;
+    p {
+        text-align: left;
+        padding-bottom: 6px;
+        text-overflow: ellipsis;
+    }
+}
+
+.bookingType-image {
+    max-width: 420px;
+    border-radius: 18px;
+    margin-top: 5px;
+    margin-right: 12px;
+
+    height: auto;
+}
+
+.bookingType-image-preview {
+    max-width: 200px;
+    border-radius: 18px;
+    margin-top: 5px;
+    margin-right: 12px;
+
+    height: auto;
+}

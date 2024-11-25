@@ -1,0 +1,118 @@
+{
+    "logLevel": "Verbose",
+    // Input
+    // "basePath": "",
+    "tsconfig": "tsconfig.typedoc.json",
+    "entryPoints": ["./src/"],
+    "exclude": [
+        "**/node_modules/**/*",
+        "**/tsoa-build/**/*",
+        "./**/.pnpm/**/*"
+    ],
+    "entryPointStrategy": "expand",
+
+    // Output
+    "cleanOutputDir": true,
+    "out": "../docs/generated",
+    "json": "../docs/generated/docs.json",
+    "githubPages": true,
+
+    // Validation
+    "validation": {
+        "notExported": true,
+        "invalidLink": true
+        // "notDocumented": true
+    },
+    // "treatWarningsAsErrors: true,
+    // "treatValidationWarningsAsErrors": true,
+    // "intentionallyNotExported": ["InternalClass", "src/other.ts:OtherInternal"],
+    "requiredToBeDocumented": [
+        //"Project",
+        //"Module",
+        //"Namespace",
+        "Enum",
+        "EnumMember",
+        "Variable",
+        "Function",
+        "Class",
+        "Interface",
+        //"Constructor",
+        "Property",
+        "Method",
+        // Implicitly set if function/method is set (this means you can't require docs on methods, but not functions)
+        // This exists because methods/functions can have multiple signatures due to overloads, and TypeDoc puts comment
+        // data on the signature. This might be improved someday, so you probably shouldn't set this directly.
+        //    "CallSignature",
+        // Index signature { [k: string]: string } "properties"
+        //    "IndexSignature",
+        // Equivalent to Constructor due to the same implementation detail as CallSignature
+        //    "ConstructorSignature",
+        //"Parameter",
+        // Used for object literal types. You probably should set TypeAlias instead, which refers to types created with `type X =`.
+        // This only really exists because of an implementation detail.
+        //    "TypeLiteral",
+        //"TypeParameter",
+        "Accessor", // shorthand for GetSignature + SetSignature
+        //   "GetSignature",
+        //    "SetSignature",
+        "TypeAlias"
+        // TypeDoc creates reference reflections if a symbol is exported from a package with multiple names. Most projects
+        // won't have any of these, and they just render as a link to the canonical name.
+        //    "Reference",
+    ],
+
+    // Options
+    "includeVersion": true,
+    "gitRevision": "main", // link to main branch
+
+    "excludeExternals": true,
+    "externalPattern": ["**/node_modules/**/*", "./**/.pnpm/**"],
+    "excludePrivate": false,
+    "excludeProtected": false,
+    "excludeNotDocumented": false,
+    "excludeReferences": false,
+    // "excludeNotDocumentedKinds": ["Property", "Interface", "TypeAlias"]
+
+    "markdownItOptions": {
+        "html": true,
+        "linkify": true
+    },
+
+    // Styling
+    // "titleLink": "",
+
+    "customCss": "../docs/docs.css",
+    "customFooterHtml": "Copyright 2024 <strong>A.D.</strong>",
+    // "customFooterHTMLDisableWrapper": ""
+    // "hideGenerator": false,
+
+    // Navigation
+    // "hostedBaseUrl": "https://example.com",
+    // "useHostedBaseUrlForAbsoluteLinks": false,
+    // "navigationLinks": {"Example": "http://example.com"},
+    // "sidebarLinks": {"Example": "http://example.com"},
+    "navigation": {
+        "includeCategories": true,
+        "includeGroups": false,
+        "includeFolders": true
+    },
+    "categorizeByGroup": false,
+
+    // Search
+    "searchInComments": true,
+    "searchInDocuments": true,
+    // "searchCategoryBoosts": {"Common Items": 1.5}
+    // "searchGroupBoosts": {"Some Group": 1.5}
+
+    // Filters
+    "visibilityFilters": {
+        "protected": true,
+        "private": true,
+        "inherited": true,
+        "external": true,
+        "@alpha": true,
+        "@beta": true
+    }
+
+    // TODO: https://typedoc.org/options/comments/
+}

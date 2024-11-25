@@ -1,0 +1,134 @@
+/** TagView.tsx - Public Single Page */
+.tag-view {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    height: 100%;
+    padding: 20px 0 0 0;
+
+    .tag-view-header {
+        padding-bottom: 12px;
+
+        .tag-view-navigation {
+            position: absolute;
+            top: 5em;
+            left: 4em;
+
+            button {
+                background: none;
+                border: none;
+            }
+
+            button:hover {
+                color: orangered;
+                translate: -1px 0px;
+            }
+        }
+    }
+
+    .tag-content {
+        overflow: auto;
+        padding: 0 50px 0 50px;
+    }
+}
+
+/** TagsDisplay.tsx & TagsDisplayItem.tsx - Public Overview Page */
+.tags-display {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    width: 100%;
+
+    margin-bottom: 40px;
+
+    .tags-display-item {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        border: 2px solid gainsboro;
+        border-radius: 10px;
+
+        width: auto;
+        width: 25vw;
+        max-width: 25vw;
+        height: 44vh;
+        max-height: 44vh;
+
+        margin: 0 10px 0 10px;
+
+        * {
+            // overflow: hidden;
+            // white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .tags-display-item-body {
+            height: 44vh;
+            max-height: 44vh;
+        }
+
+        .tag-content-container {
+            .tag-content {
+                white-space: wrap;
+                text-overflow: ellipsis;
+            }
+
+            .tag-markdown {
+            }
+        }
+    }
+}
+
+/** TagsList.tsx & TagsListItem.tsx - Admin Page */
+.tags-list-wrapper {
+    padding: 0 100px 0 100px;
+    .tags-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .tags-list-item-container {
+            .tags-list-item-header h1 {
+                margin: 0;
+            }
+
+            .tags-list-item {
+                display: flex;
+            }
+        }
+    }
+}
+
+/** Shared */
+.tag-markdown {
+    text-overflow: ellipsis;
+    p {
+        text-align: left;
+        padding-bottom: 6px;
+        text-overflow: ellipsis;
+    }
+}
+
+.tag-image {
+    max-width: 420px;
+    border-radius: 18px;
+    margin-top: 5px;
+    margin-right: 12px;
+
+    height: auto;
+}
+
+.tag-image-preview {
+    max-width: 200px;
+    border-radius: 18px;
+    margin-top: 5px;
+    margin-right: 12px;
+
+    height: auto;
+}

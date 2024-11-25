@@ -1,0 +1,145 @@
+/** FeedbackView.tsx - Public Single Page */
+.feedback-view {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    height: 100%;
+    padding: 20px 100px 0 100px;
+
+    .feedback-view-header {
+        padding-bottom: 12px;
+
+        .feedback-view-navigation {
+            position: absolute;
+            top: 5em;
+            left: 4em;
+
+            button {
+                background: none;
+                border: none;
+            }
+
+            button:hover {
+                color: orangered;
+                translate: -1px 0px;
+            }
+        }
+    }
+
+    .feedback-content {
+        overflow: auto;
+        padding: 0 50px 0 50px;
+    }
+}
+
+/** FeedbacksDisplay.tsx & FeedbacksDisplayItem.tsx - Public Overview Page */
+.feedbacks-display {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    width: 100%;
+
+    margin-bottom: 40px;
+
+    .feedbacks-display-column {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .feedbacks-display-item {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        border: 2px solid gainsboro;
+        border-radius: 10px;
+
+        width: auto;
+        width: 25vw;
+        max-width: 25vw;
+
+        margin: 0 10px 0 10px;
+
+        * {
+            // overflow: hidden;
+            // white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        @media (max-width: 768px) {
+            width: 90vw;
+            max-width: 90vw;
+
+            * {
+                max-width: 90vw;
+            }
+        }
+
+        .feedbacks-display-item-body {
+        }
+
+        .feedback-content-container {
+            .feedback-content {
+                white-space: wrap;
+                text-overflow: ellipsis;
+            }
+
+            .feedback-markdown {
+            }
+        }
+    }
+}
+
+/** FeedbacksList.tsx & FeedbacksListItem.tsx - Admin Page */
+.feedbacks-list-wrapper {
+    padding: 0 100px 0 100px;
+    .feedbacks-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .feedbacks-list-item-container {
+            .feedbacks-list-item-header h1 {
+                margin: 0;
+            }
+
+            .feedbacks-list-item {
+                display: flex;
+            }
+        }
+    }
+}
+
+/** Shared */
+.feedback-markdown {
+    text-overflow: ellipsis;
+    p {
+        text-align: left;
+        padding-bottom: 6px;
+        text-overflow: ellipsis;
+    }
+}
+
+.feedback-image {
+    max-width: 420px;
+    border-radius: 18px;
+    margin-top: 5px;
+    margin-right: 12px;
+
+    height: auto;
+}
+
+.feedback-image-preview {
+    max-width: 200px;
+    border-radius: 18px;
+    margin-top: 5px;
+    margin-right: 12px;
+
+    height: auto;
+}

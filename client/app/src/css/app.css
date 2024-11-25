@@ -1,0 +1,49 @@
+#root {
+  /* max-width: 1280px; */
+  margin: 0 auto;
+  /* padding: 2rem; */
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+  max-height: 100vh;
+}
+
+.card-body {
+  background-color: #ebfff063;
+}
+
+body {
+  max-height: 100vh;
+  background-color: #ebfff0;
+}
+
+nav {
+  margin: 0;
+  padding: 0;
+}
+
+
+#content {
+  flex-grow: 1;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: auto;
+  height: 100%;
+}
+
+#header {
+  padding: 0;
+  margin: 0;
+  background: linear-gradient(#d1e7d6, #ebfff0)
+}
+
+#footer {
+  /* position: sticky; */
+  /* bottom: 0px; */
+  background: linear-gradient(#ebfff0, #d1e7d6)
+}

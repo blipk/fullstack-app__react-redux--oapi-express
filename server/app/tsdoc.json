@@ -1,0 +1,74 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/tsdoc/v0/tsdoc.schema.json",
+
+    "extends": ["./node_modules/typedoc/tsdoc.json"],
+
+    "noStandardTags": false,
+    "supportForTags": {
+        // Indicate that the default tags are supported: https://github.com/microsoft/tsdoc/issues/424
+        "@alpha": true,
+        "@beta": true,
+        "@decorator": true,
+        "@deprecated": true,
+        "@defaultValue": true,
+        "@eventProperty": true,
+        "@example": true,
+        "@experimental": true,
+        "@inheritDoc": true,
+        "@internal": true,
+        "@label": true,
+        "@link": true,
+        "@override": true,
+        "@packageDocumentation": true,
+        "@param": true,
+        "@privateRemarks": true,
+        "@public": true,
+        "@readonly": true,
+        "@remarks": true,
+        "@returns": true,
+        "@sealed": true,
+        "@see": true,
+        "@throws": true,
+        "@typeParam": true,
+        "@virtual": true,
+
+        // TypeDoc
+        "@category": true,
+        "@categoryDescription": true,
+        "@document": true,
+        "@enum": true,
+        "@event": true,
+        "@group": true,
+        "@groupDescription": true,
+        "@hidden": true,
+        "@hideconstructor": true,
+        "@ignore": true,
+        "@interface": true,
+        "@module": true,
+        "@namespace": true,
+        "@overload": true,
+        "@private": true,
+        "@property": true,
+        "@protected": true,
+        "@satisfies": true,
+        "@template": true,
+
+        // tsoa
+        "@tsoaModel": true
+    },
+
+    "tagDefinitions": [
+        {
+            "tagName": "@tsoaModel",
+            "syntaxKind": "block",
+            "allowMultiple": false
+        }
+    ]
+}
+
+/*
+syntaxKind:
+    "inline" means that this tag can appear inside other documentation sections (example: {@link}).
+    "block" means that this tag starts a new documentation section (example: @remarks).
+    "modifier" means that this tag's presence indicates an aspect of the associated API item (example: @internal).
+*/

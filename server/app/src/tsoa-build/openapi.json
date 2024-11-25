@@ -1,0 +1,6616 @@
+{
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"AuthErrorTypes": {
+				"description": "The types of auth errors that can occur, this is used for {@link AuthErrorResponseContent.message}",
+				"enum": [
+					"Not Authenticated",
+					"Not Authorized",
+					"Security Failure"
+				],
+				"type": "string"
+			},
+			"AuthErrorResponseContent": {
+				"description": "This is the content of an {@link AuthErrorResponseBody.errors}",
+				"properties": {
+					"message": {
+						"$ref": "#/components/schemas/AuthErrorTypes"
+					},
+					"details": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AuthErrorBodyMessageT": {
+				"type": "string",
+				"enum": [
+					"Auth Error"
+				],
+				"nullable": false,
+				"description": "Constant literal type for {@link AuthErrorResponseBody.message}"
+			},
+			"ErrorResponseBody_AuthErrorResponseContent.AuthErrorBodyMessageT_": {
+				"description": "Represents the response body of an error response",
+				"properties": {
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/AuthErrorResponseContent"
+						},
+						"type": "array"
+					},
+					"message": {
+						"$ref": "#/components/schemas/AuthErrorBodyMessageT"
+					}
+				},
+				"required": [
+					"errors",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AuthErrorResponseBody": {
+				"$ref": "#/components/schemas/ErrorResponseBody_AuthErrorResponseContent.AuthErrorBodyMessageT_",
+				"description": "The response body for an {@link AuthError}"
+			},
+			"ValidationError": {
+				"description": "Validation error description.",
+				"properties": {
+					"target": {
+						"additionalProperties": false,
+						"type": "object",
+						"description": "Object that was validated.\n\nOPTIONAL - configurable via the ValidatorOptions.validationError.target option"
+					},
+					"property": {
+						"type": "string",
+						"description": "Object's property that haven't pass validation."
+					},
+					"value": {
+						"description": "Value that haven't pass a validation.\n\nOPTIONAL - configurable via the ValidatorOptions.validationError.value option"
+					},
+					"constraints": {
+						"properties": {},
+						"additionalProperties": {
+							"type": "string"
+						},
+						"type": "object",
+						"description": "Constraints that failed validation with error messages."
+					},
+					"children": {
+						"items": {
+							"$ref": "#/components/schemas/ValidationError"
+						},
+						"type": "array",
+						"description": "Contains all nested validation errors of the property."
+					},
+					"contexts": {
+						"properties": {},
+						"additionalProperties": {},
+						"type": "object"
+					}
+				},
+				"required": [
+					"property"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"FieldErrors": {
+				"properties": {},
+				"type": "object",
+				"additionalProperties": {
+					"properties": {
+						"value": {},
+						"message": {
+							"type": "string"
+						}
+					},
+					"required": [
+						"message"
+					],
+					"type": "object"
+				}
+			},
+			"Pick_ValidationErrorItem.Exclude_keyofValidationErrorItem.instance__": {
+				"properties": {
+					"type": {
+						"type": "string",
+						"enum": [
+							"notNull violation",
+							"unique violation",
+							"Validation error",
+							null
+						],
+						"nullable": true,
+						"description": "The type/origin of the validation error"
+					},
+					"path": {
+						"type": "string",
+						"nullable": true,
+						"description": "The field that triggered the validation error"
+					},
+					"value": {
+						"description": "The value that generated the error"
+					},
+					"origin": {
+						"type": "string",
+						"enum": [
+							"CORE",
+							"DB",
+							"FUNCTION",
+							"DATATYPE",
+							null
+						],
+						"nullable": true
+					},
+					"validatorKey": {
+						"type": "string",
+						"nullable": true,
+						"description": "A validation \"key\", used for identification"
+					},
+					"validatorName": {
+						"type": "string",
+						"nullable": true,
+						"description": "Property name of the BUILT-IN validator function that caused the validation error (e.g. \"in\" or \"len\"), if applicable"
+					},
+					"validatorArgs": {
+						"items": {},
+						"type": "array",
+						"description": "Parameters used with the BUILT-IN validator function, if applicable"
+					},
+					"name": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"stack": {
+						"type": "string"
+					},
+					"cause": {}
+				},
+				"required": [
+					"type",
+					"path",
+					"value",
+					"origin",
+					"validatorKey",
+					"validatorName",
+					"validatorArgs",
+					"name",
+					"message"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_ValidationErrorItem.instance_": {
+				"$ref": "#/components/schemas/Pick_ValidationErrorItem.Exclude_keyofValidationErrorItem.instance__",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"ValidationErrorDetailsTypes": {
+				"anyOf": [
+					{
+						"items": {
+							"$ref": "#/components/schemas/ValidationError"
+						},
+						"type": "array"
+					},
+					{
+						"$ref": "#/components/schemas/FieldErrors"
+					},
+					{
+						"items": {
+							"$ref": "#/components/schemas/Omit_ValidationErrorItem.instance_"
+						},
+						"type": "array"
+					}
+				],
+				"description": "This is the types acceptable for {@link ValidationErrorResponseContent.expandedDetails}\nDiffers between class-validator, TSOA or Sequelize - Typesript struggles with TModelAttributes from ValidationErrorItem.model"
+			},
+			"ValidationErrorResponseContent": {
+				"description": "Represents the content for {@link ValidationErrorResponseBody.errors}",
+				"properties": {
+					"details": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					},
+					"expandedDetails": {
+						"$ref": "#/components/schemas/ValidationErrorDetailsTypes"
+					}
+				},
+				"required": [
+					"details",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ValidationErrorMessageT": {
+				"type": "string",
+				"enum": [
+					"Validation Failed"
+				],
+				"nullable": false,
+				"description": "This is the fixed literal type for {@link ValidationErrorResponseBody.message}"
+			},
+			"ErrorResponseBody_ValidationErrorResponseContent.ValidationErrorMessageT_": {
+				"description": "Represents the response body of an error response",
+				"properties": {
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/ValidationErrorResponseContent"
+						},
+						"type": "array"
+					},
+					"message": {
+						"$ref": "#/components/schemas/ValidationErrorMessageT"
+					}
+				},
+				"required": [
+					"errors",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ValidationErrorResponseBody": {
+				"$ref": "#/components/schemas/ErrorResponseBody_ValidationErrorResponseContent.ValidationErrorMessageT_",
+				"description": "Represents the response body for a validation error\n\nUsed by internal {@link QueryValidationError} and {@link ClassValidationError},\nas well as `sequelize`.{@link ValidationError} and `tsoa`.`ValidateError`"
+			},
+			"Pick_any.Exclude_keyofany.Extract_password-or-ReadResponseContentOmittedKeysT.keyofUserModelDTO___": {
+				"properties": {
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"firstName": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"profileImageURL": {
+						"type": "string"
+					},
+					"profileText": {
+						"type": "string"
+					},
+					"fullName": {
+						"type": "string"
+					},
+					"isAdmin": {
+						"type": "boolean"
+					},
+					"isStaff": {
+						"type": "boolean"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"firstName",
+					"lastName",
+					"email",
+					"id",
+					"createdAt"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_password-or-ReadResponseContentOmittedKeysT.keyofUserModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_password-or-ReadResponseContentOmittedKeysT.keyofUserModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_UserModelDTO.Extract_password-or-ReadResponseContentOmittedKeysT.keyofUserModelDTO_.Extract_never-or-ReadResponseContentOptionalKeysT.keyofUserModelDTO_.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_password-or-ReadResponseContentOmittedKeysT.keyofUserModelDTO__"
+			},
+			"ReadResponseContent_UserModelDTO.password.never_": {
+				"$ref": "#/components/schemas/TransformKeys_UserModelDTO.Extract_password-or-ReadResponseContentOmittedKeysT.keyofUserModelDTO_.Extract_never-or-ReadResponseContentOptionalKeysT.keyofUserModelDTO_.never_"
+			},
+			"FoundResponseMessageT": {
+				"type": "string",
+				"enum": [
+					"Found"
+				],
+				"nullable": false,
+				"description": "The value of {@link DataResponseBody.message} for `get` and `getAll` route success"
+			},
+			"MetaData_User_": {
+				"description": "Represents metadata for the data returned",
+				"properties": {
+					"dataType": {
+						"type": "string",
+						"enum": [
+							"User"
+						],
+						"nullable": false
+					}
+				},
+				"required": [
+					"dataType"
+				],
+				"type": "object",
+				"additionalProperties": {
+					"anyOf": [
+						{
+							"additionalProperties": false,
+							"type": "object"
+						},
+						{
+							"type": "string"
+						},
+						{
+							"type": "number",
+							"format": "double"
+						},
+						{
+							"type": "boolean"
+						}
+					],
+					"nullable": true
+				}
+			},
+			"DataResponseBody_Array_ReadResponseContent_UserModelDTO.password.never__.User.FoundResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/ReadResponseContent_UserModelDTO.password.never_"
+						},
+						"type": "array"
+					},
+					"message": {
+						"$ref": "#/components/schemas/FoundResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_User_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserReadManyResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_Array_ReadResponseContent_UserModelDTO.password.never__.User.FoundResponseMessageT_",
+				"description": "Possible responses for {@link UserController.getAllUsers}"
+			},
+			"OrderByFieldValues": {
+				"description": "Possible values for the filter query paramater on controller routes",
+				"enum": [
+					"createdAt",
+					"updatedAt",
+					"-createdAt",
+					"-updatedAt"
+				],
+				"type": "string"
+			},
+			"NotFoundDetailedMessageT": {
+				"type": "string",
+				"description": "The type of {@link NotFoundErrorsType.message } for not found responses"
+			},
+			"NotFoundResponseContent": {
+				"description": "The type of {@link ErrorResponseBody.errors} for not found responses",
+				"properties": {
+					"message": {
+						"$ref": "#/components/schemas/NotFoundDetailedMessageT"
+					}
+				},
+				"required": [
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"NotFoundMessageT": {
+				"type": "string",
+				"enum": [
+					"Not Found"
+				],
+				"nullable": false,
+				"description": "The {@link ErrorResponseBody.message} for not found responses"
+			},
+			"ErrorResponseBody_NotFoundResponseContent.NotFoundMessageT_": {
+				"description": "Represents the response body of an error response",
+				"properties": {
+					"errors": {
+						"items": {
+							"$ref": "#/components/schemas/NotFoundResponseContent"
+						},
+						"type": "array"
+					},
+					"message": {
+						"$ref": "#/components/schemas/NotFoundMessageT"
+					}
+				},
+				"required": [
+					"errors",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"NotFoundResponseBody": {
+				"$ref": "#/components/schemas/ErrorResponseBody_NotFoundResponseContent.NotFoundMessageT_",
+				"description": "The type of {@link ErrorResponseBody} for not found responses"
+			},
+			"UserNotFoundResponseBody": {
+				"$ref": "#/components/schemas/NotFoundResponseBody",
+				"description": "Response type for this controllers object not found response"
+			},
+			"DataResponseBody_ReadResponseContent_UserModelDTO.password.never_.User.FoundResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/ReadResponseContent_UserModelDTO.password.never_"
+					},
+					"message": {
+						"$ref": "#/components/schemas/FoundResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_User_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserReadResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_ReadResponseContent_UserModelDTO.password.never_.User.FoundResponseMessageT_",
+				"description": "Possible responses for {@link UserController.getUser}"
+			},
+			"AppModelIdT": {
+				"type": "number",
+				"format": "double",
+				"description": "This is the type of {@link AppModel.id} - used to ensure its correct when used in routers etc."
+			},
+			"Pick_any.Exclude_keyofany.Extract_password-or-CreateResponseContentOmittedKeysT.keyofUserModelDTO___": {
+				"properties": {
+					"firstName": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"profileImageURL": {
+						"type": "string"
+					},
+					"profileText": {
+						"type": "string"
+					},
+					"fullName": {
+						"type": "string"
+					},
+					"isAdmin": {
+						"type": "boolean"
+					},
+					"isStaff": {
+						"type": "boolean"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"firstName",
+					"lastName",
+					"email",
+					"id",
+					"createdAt"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_password-or-CreateResponseContentOmittedKeysT.keyofUserModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_password-or-CreateResponseContentOmittedKeysT.keyofUserModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_UserModelDTO.Extract_password-or-CreateResponseContentOmittedKeysT.keyofUserModelDTO_.Extract_never-or-CreateResponseContentOptionalKeysT.keyofUserModelDTO_.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_password-or-CreateResponseContentOmittedKeysT.keyofUserModelDTO__"
+			},
+			"CreateResponseContent_UserModelDTO.password.never_": {
+				"$ref": "#/components/schemas/TransformKeys_UserModelDTO.Extract_password-or-CreateResponseContentOmittedKeysT.keyofUserModelDTO_.Extract_never-or-CreateResponseContentOptionalKeysT.keyofUserModelDTO_.never_"
+			},
+			"CreatedResponseMessageT": {
+				"type": "string",
+				"enum": [
+					"Created"
+				],
+				"nullable": false,
+				"description": "The value of {@link DataResponseBody.message} for `create` route success"
+			},
+			"DataResponseBody_CreateResponseContent_UserModelDTO.password.never_.User.CreatedResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/CreateResponseContent_UserModelDTO.password.never_"
+					},
+					"message": {
+						"$ref": "#/components/schemas/CreatedResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_User_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserCreateResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_CreateResponseContent_UserModelDTO.password.never_.User.CreatedResponseMessageT_",
+				"description": "Possible responses for {@link UserController.createUser}"
+			},
+			"Pick_any.Exclude_keyofany.Extract_isAdmin-or-isStaff-or-fullName-or-CreateRequestBodyOmittedKeysT.keyofUserModelDTO___": {
+				"properties": {
+					"password": {
+						"type": "string"
+					},
+					"firstName": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"profileImageURL": {
+						"type": "string"
+					},
+					"profileText": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"password",
+					"firstName",
+					"lastName",
+					"email"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_isAdmin-or-isStaff-or-fullName-or-CreateRequestBodyOmittedKeysT.keyofUserModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_isAdmin-or-isStaff-or-fullName-or-CreateRequestBodyOmittedKeysT.keyofUserModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_UserModelDTO.Extract_isAdmin-or-isStaff-or-fullName-or-CreateRequestBodyOmittedKeysT.keyofUserModelDTO_.profileImageURL.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_isAdmin-or-isStaff-or-fullName-or-CreateRequestBodyOmittedKeysT.keyofUserModelDTO__"
+			},
+			"CreateRequestBody_UserModelDTO.isAdmin-or-isStaff-or-fullName.profileImageURL_": {
+				"$ref": "#/components/schemas/TransformKeys_UserModelDTO.Extract_isAdmin-or-isStaff-or-fullName-or-CreateRequestBodyOmittedKeysT.keyofUserModelDTO_.profileImageURL.never_"
+			},
+			"UserCreateRequest": {
+				"$ref": "#/components/schemas/CreateRequestBody_UserModelDTO.isAdmin-or-isStaff-or-fullName.profileImageURL_",
+				"description": "Request body format for {@link UserController.createUser}'s `user` body parameter"
+			},
+			"Pick_any.Exclude_keyofany.Extract_password-or-UpdateResponseContentOmittedKeysT.keyofUserModelDTO___": {
+				"properties": {
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"firstName": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"profileImageURL": {
+						"type": "string"
+					},
+					"profileText": {
+						"type": "string"
+					},
+					"fullName": {
+						"type": "string"
+					},
+					"isAdmin": {
+						"type": "boolean"
+					},
+					"isStaff": {
+						"type": "boolean"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"updatedAt",
+					"firstName",
+					"lastName",
+					"email",
+					"id",
+					"createdAt"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_password-or-UpdateResponseContentOmittedKeysT.keyofUserModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_password-or-UpdateResponseContentOmittedKeysT.keyofUserModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_UserModelDTO.Extract_password-or-UpdateResponseContentOmittedKeysT.keyofUserModelDTO_.never.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_password-or-UpdateResponseContentOmittedKeysT.keyofUserModelDTO__"
+			},
+			"UpdateResponseContent_UserModelDTO.password.never_": {
+				"$ref": "#/components/schemas/TransformKeys_UserModelDTO.Extract_password-or-UpdateResponseContentOmittedKeysT.keyofUserModelDTO_.never.never_"
+			},
+			"UpdatedResponseMessageT": {
+				"type": "string",
+				"enum": [
+					"Updated"
+				],
+				"nullable": false,
+				"description": "The value of {@link DataResponseBody.message} for `update` route success"
+			},
+			"DataResponseBody_UpdateResponseContent_UserModelDTO.password.never_.User.UpdatedResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/UpdateResponseContent_UserModelDTO.password.never_"
+					},
+					"message": {
+						"$ref": "#/components/schemas/UpdatedResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_User_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserUpdateResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_UpdateResponseContent_UserModelDTO.password.never_.User.UpdatedResponseMessageT_",
+				"description": "Possible responses for {@link UserController.updateUser}"
+			},
+			"Pick_any.Exclude_keyofany.Extract_isAdmin-or-isStaff-or-fullName-or-UpdateRequestBodyOmittedKeysT.keyofUserModelDTO___": {
+				"properties": {
+					"password": {
+						"type": "string"
+					},
+					"firstName": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"profileImageURL": {
+						"type": "string"
+					},
+					"profileText": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_isAdmin-or-isStaff-or-fullName-or-UpdateRequestBodyOmittedKeysT.keyofUserModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_isAdmin-or-isStaff-or-fullName-or-UpdateRequestBodyOmittedKeysT.keyofUserModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_Partial_UserModelDTO_.Extract_isAdmin-or-isStaff-or-fullName-or-UpdateRequestBodyOmittedKeysT.keyofUserModelDTO_.profileText.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_isAdmin-or-isStaff-or-fullName-or-UpdateRequestBodyOmittedKeysT.keyofUserModelDTO__"
+			},
+			"UpdateRequestBody_UserModelDTO.isAdmin-or-isStaff-or-fullName.profileText_": {
+				"$ref": "#/components/schemas/TransformKeys_Partial_UserModelDTO_.Extract_isAdmin-or-isStaff-or-fullName-or-UpdateRequestBodyOmittedKeysT.keyofUserModelDTO_.profileText.never_",
+				"description": "Represents the {@link DataResponseBody} for a successful `update` route response"
+			},
+			"UserUpdateRequest": {
+				"$ref": "#/components/schemas/UpdateRequestBody_UserModelDTO.isAdmin-or-isStaff-or-fullName.profileText_",
+				"description": "Request body format for {@link UserController.updateUser}'s `user` body parameter"
+			},
+			"DeletedResponseContent": {
+				"description": "Represents {@link DeleteResponseBody.data}",
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DeletedResponseMessageT": {
+				"type": "string",
+				"enum": [
+					"Deleted"
+				],
+				"nullable": false,
+				"description": "The value of {@link DataResponseBody.message} for `delete` route success"
+			},
+			"DataResponseBody_DeletedResponseContent.User.DeletedResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/DeletedResponseContent"
+					},
+					"message": {
+						"$ref": "#/components/schemas/DeletedResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_User_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DeleteResponseBody_User_": {
+				"$ref": "#/components/schemas/DataResponseBody_DeletedResponseContent.User.DeletedResponseMessageT_",
+				"description": "Represents the {@link DataResponseBody} for a successful `delete` route response"
+			},
+			"UserDeleteResponse": {
+				"$ref": "#/components/schemas/DeleteResponseBody_User_",
+				"description": "Possible responses for {@link UserController.deleteUser}"
+			},
+			"ReadResponseContent_UserModelDTO.password_": {
+				"$ref": "#/components/schemas/TransformKeys_UserModelDTO.Extract_password-or-ReadResponseContentOmittedKeysT.keyofUserModelDTO_.Extract_never-or-ReadResponseContentOptionalKeysT.keyofUserModelDTO_.never_"
+			},
+			"OAuth2TokenResponseBody": {
+				"description": "OAuth2 Response Body compliant with RFC6749 = https://www.rfc-editor.org/rfc/rfc6749#section-4.2.2",
+				"properties": {
+					"access_token": {
+						"type": "string"
+					},
+					"token_type": {
+						"type": "string",
+						"enum": [
+							"Bearer",
+							"bearer"
+						]
+					},
+					"expires_in": {
+						"anyOf": [
+							{
+								"type": "string"
+							},
+							{
+								"type": "number",
+								"format": "double"
+							}
+						]
+					},
+					"user": {
+						"$ref": "#/components/schemas/ReadResponseContent_UserModelDTO.password_"
+					}
+				},
+				"required": [
+					"access_token",
+					"token_type",
+					"expires_in",
+					"user"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AuthLoginResponse": {
+				"$ref": "#/components/schemas/OAuth2TokenResponseBody",
+				"description": "Possible responses for {@link AuthController.login}"
+			},
+			"Pick_any.Exclude_keyofany.Extract_password-or-updatedAt-or-ReadResponseContentOmittedKeysT.keyofUserModelDTO___": {
+				"properties": {
+					"firstName": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					},
+					"email": {
+						"type": "string"
+					},
+					"profileImageURL": {
+						"type": "string"
+					},
+					"profileText": {
+						"type": "string"
+					},
+					"fullName": {
+						"type": "string"
+					},
+					"isAdmin": {
+						"type": "boolean"
+					},
+					"isStaff": {
+						"type": "boolean"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"firstName",
+					"lastName",
+					"email",
+					"id",
+					"createdAt"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_password-or-updatedAt-or-ReadResponseContentOmittedKeysT.keyofUserModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_password-or-updatedAt-or-ReadResponseContentOmittedKeysT.keyofUserModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_UserModelDTO.Extract_password-or-updatedAt-or-ReadResponseContentOmittedKeysT.keyofUserModelDTO_.Extract_never-or-ReadResponseContentOptionalKeysT.keyofUserModelDTO_.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_password-or-updatedAt-or-ReadResponseContentOmittedKeysT.keyofUserModelDTO__"
+			},
+			"ReadResponseContent_UserModelDTO.password-or-updatedAt_": {
+				"$ref": "#/components/schemas/TransformKeys_UserModelDTO.Extract_password-or-updatedAt-or-ReadResponseContentOmittedKeysT.keyofUserModelDTO_.Extract_never-or-ReadResponseContentOptionalKeysT.keyofUserModelDTO_.never_"
+			},
+			"DataResponseBody_ReadResponseContent_UserModelDTO.password-or-updatedAt_.User.FoundResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/ReadResponseContent_UserModelDTO.password-or-updatedAt_"
+					},
+					"message": {
+						"$ref": "#/components/schemas/FoundResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_User_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AuthRegisterResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_ReadResponseContent_UserModelDTO.password-or-updatedAt_.User.FoundResponseMessageT_",
+				"description": "Possible responses for {@link AuthController.register}"
+			},
+			"AuthRegisterRequestBody": {
+				"$ref": "#/components/schemas/CreateRequestBody_UserModelDTO.isAdmin-or-isStaff-or-fullName.profileImageURL_",
+				"description": "Request body format for {@link AuthController.register}'s `blog` body parameter"
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-ReadResponseContentOmittedKeysT.keyofTagModelDTO___": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"cssColour": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name",
+					"id",
+					"createdAt",
+					"cssColour"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-ReadResponseContentOmittedKeysT.keyofTagModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-ReadResponseContentOmittedKeysT.keyofTagModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_TagModelDTO.Extract_never-or-ReadResponseContentOmittedKeysT.keyofTagModelDTO_.Extract_never-or-ReadResponseContentOptionalKeysT.keyofTagModelDTO_.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-ReadResponseContentOmittedKeysT.keyofTagModelDTO__"
+			},
+			"ReadResponseContent_TagModelDTO.never.never_": {
+				"$ref": "#/components/schemas/TransformKeys_TagModelDTO.Extract_never-or-ReadResponseContentOmittedKeysT.keyofTagModelDTO_.Extract_never-or-ReadResponseContentOptionalKeysT.keyofTagModelDTO_.never_"
+			},
+			"MetaData_Tag_": {
+				"description": "Represents metadata for the data returned",
+				"properties": {
+					"dataType": {
+						"type": "string",
+						"enum": [
+							"Tag"
+						],
+						"nullable": false
+					}
+				},
+				"required": [
+					"dataType"
+				],
+				"type": "object",
+				"additionalProperties": {
+					"anyOf": [
+						{
+							"additionalProperties": false,
+							"type": "object"
+						},
+						{
+							"type": "string"
+						},
+						{
+							"type": "number",
+							"format": "double"
+						},
+						{
+							"type": "boolean"
+						}
+					],
+					"nullable": true
+				}
+			},
+			"DataResponseBody_Array_ReadResponseContent_TagModelDTO.never.never__.Tag.FoundResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/ReadResponseContent_TagModelDTO.never.never_"
+						},
+						"type": "array"
+					},
+					"message": {
+						"$ref": "#/components/schemas/FoundResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_Tag_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"TagReadManyResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_Array_ReadResponseContent_TagModelDTO.never.never__.Tag.FoundResponseMessageT_",
+				"description": "Possible responses for {@link TagController.getAllTags}"
+			},
+			"TagNotFoundResponseBody": {
+				"$ref": "#/components/schemas/NotFoundResponseBody",
+				"description": "Response type for this controllers object not found response"
+			},
+			"DataResponseBody_ReadResponseContent_TagModelDTO.never.never_.Tag.FoundResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/ReadResponseContent_TagModelDTO.never.never_"
+					},
+					"message": {
+						"$ref": "#/components/schemas/FoundResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_Tag_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"TagReadResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_ReadResponseContent_TagModelDTO.never.never_.Tag.FoundResponseMessageT_",
+				"description": "Possible responses for {@link TagController.getTag}"
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-CreateResponseContentOmittedKeysT.keyofTagModelDTO___": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"cssColour": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name",
+					"id",
+					"createdAt",
+					"cssColour"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-CreateResponseContentOmittedKeysT.keyofTagModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-CreateResponseContentOmittedKeysT.keyofTagModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_TagModelDTO.Extract_never-or-CreateResponseContentOmittedKeysT.keyofTagModelDTO_.Extract_never-or-CreateResponseContentOptionalKeysT.keyofTagModelDTO_.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-CreateResponseContentOmittedKeysT.keyofTagModelDTO__"
+			},
+			"CreateResponseContent_TagModelDTO.never.never_": {
+				"$ref": "#/components/schemas/TransformKeys_TagModelDTO.Extract_never-or-CreateResponseContentOmittedKeysT.keyofTagModelDTO_.Extract_never-or-CreateResponseContentOptionalKeysT.keyofTagModelDTO_.never_"
+			},
+			"DataResponseBody_CreateResponseContent_TagModelDTO.never.never_.Tag.CreatedResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/CreateResponseContent_TagModelDTO.never.never_"
+					},
+					"message": {
+						"$ref": "#/components/schemas/CreatedResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_Tag_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"TagCreateResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_CreateResponseContent_TagModelDTO.never.never_.Tag.CreatedResponseMessageT_",
+				"description": "Possible responses for {@link TagController.createTag}"
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-CreateRequestBodyOmittedKeysT.keyofTagModelDTO___": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"cssColour": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name",
+					"cssColour"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-CreateRequestBodyOmittedKeysT.keyofTagModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-CreateRequestBodyOmittedKeysT.keyofTagModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_TagModelDTO.Extract_never-or-CreateRequestBodyOmittedKeysT.keyofTagModelDTO_.never.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-CreateRequestBodyOmittedKeysT.keyofTagModelDTO__"
+			},
+			"CreateRequestBody_TagModelDTO.never.never_": {
+				"$ref": "#/components/schemas/TransformKeys_TagModelDTO.Extract_never-or-CreateRequestBodyOmittedKeysT.keyofTagModelDTO_.never.never_"
+			},
+			"TagCreateRequest": {
+				"$ref": "#/components/schemas/CreateRequestBody_TagModelDTO.never.never_",
+				"description": "Request body format for {@link TagController.createTag}'s `tag` body parameter"
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofTagModelDTO___": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"cssColour": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name",
+					"updatedAt",
+					"id",
+					"createdAt",
+					"cssColour"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofTagModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofTagModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_TagModelDTO.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofTagModelDTO_.never.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofTagModelDTO__"
+			},
+			"UpdateResponseContent_TagModelDTO.never.never_": {
+				"$ref": "#/components/schemas/TransformKeys_TagModelDTO.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofTagModelDTO_.never.never_"
+			},
+			"DataResponseBody_UpdateResponseContent_TagModelDTO.never.never_.Tag.UpdatedResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/UpdateResponseContent_TagModelDTO.never.never_"
+					},
+					"message": {
+						"$ref": "#/components/schemas/UpdatedResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_Tag_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"TagUpdateResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_UpdateResponseContent_TagModelDTO.never.never_.Tag.UpdatedResponseMessageT_",
+				"description": "Possible responses for {@link TagController.updateTag}"
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-UpdateRequestBodyOmittedKeysT.keyofTagModelDTO___": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"cssColour": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-UpdateRequestBodyOmittedKeysT.keyofTagModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-UpdateRequestBodyOmittedKeysT.keyofTagModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_Partial_TagModelDTO_.Extract_never-or-UpdateRequestBodyOmittedKeysT.keyofTagModelDTO_.never.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-UpdateRequestBodyOmittedKeysT.keyofTagModelDTO__"
+			},
+			"UpdateRequestBody_TagModelDTO.never.never_": {
+				"$ref": "#/components/schemas/TransformKeys_Partial_TagModelDTO_.Extract_never-or-UpdateRequestBodyOmittedKeysT.keyofTagModelDTO_.never.never_",
+				"description": "Represents the {@link DataResponseBody} for a successful `update` route response"
+			},
+			"TagUpdateRequest": {
+				"$ref": "#/components/schemas/UpdateRequestBody_TagModelDTO.never.never_",
+				"description": "Request body format for {@link TagController.updateTag}'s `tag` body parameter"
+			},
+			"DataResponseBody_DeletedResponseContent.Tag.DeletedResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/DeletedResponseContent"
+					},
+					"message": {
+						"$ref": "#/components/schemas/DeletedResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_Tag_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DeleteResponseBody_Tag_": {
+				"$ref": "#/components/schemas/DataResponseBody_DeletedResponseContent.Tag.DeletedResponseMessageT_",
+				"description": "Represents the {@link DataResponseBody} for a successful `delete` route response"
+			},
+			"TagDeleteResponse": {
+				"$ref": "#/components/schemas/DeleteResponseBody_Tag_",
+				"description": "Possible responses for {@link TagController.deleteTag}"
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-ReadResponseContentOmittedKeysT.keyofRoleModelDTO___": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"name",
+					"id",
+					"createdAt"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-ReadResponseContentOmittedKeysT.keyofRoleModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-ReadResponseContentOmittedKeysT.keyofRoleModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_RoleModelDTO.Extract_never-or-ReadResponseContentOmittedKeysT.keyofRoleModelDTO_.Extract_never-or-ReadResponseContentOptionalKeysT.keyofRoleModelDTO_.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-ReadResponseContentOmittedKeysT.keyofRoleModelDTO__"
+			},
+			"ReadResponseContent_RoleModelDTO.never.never_": {
+				"$ref": "#/components/schemas/TransformKeys_RoleModelDTO.Extract_never-or-ReadResponseContentOmittedKeysT.keyofRoleModelDTO_.Extract_never-or-ReadResponseContentOptionalKeysT.keyofRoleModelDTO_.never_"
+			},
+			"MetaData_Role_": {
+				"description": "Represents metadata for the data returned",
+				"properties": {
+					"dataType": {
+						"type": "string",
+						"enum": [
+							"Role"
+						],
+						"nullable": false
+					}
+				},
+				"required": [
+					"dataType"
+				],
+				"type": "object",
+				"additionalProperties": {
+					"anyOf": [
+						{
+							"additionalProperties": false,
+							"type": "object"
+						},
+						{
+							"type": "string"
+						},
+						{
+							"type": "number",
+							"format": "double"
+						},
+						{
+							"type": "boolean"
+						}
+					],
+					"nullable": true
+				}
+			},
+			"DataResponseBody_Array_ReadResponseContent_RoleModelDTO.never.never__.Role.FoundResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/ReadResponseContent_RoleModelDTO.never.never_"
+						},
+						"type": "array"
+					},
+					"message": {
+						"$ref": "#/components/schemas/FoundResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_Role_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RoleReadManyResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_Array_ReadResponseContent_RoleModelDTO.never.never__.Role.FoundResponseMessageT_",
+				"description": "Possible responses for {@link RoleController.getAllRoles}"
+			},
+			"RoleNotFoundResponseBody": {
+				"$ref": "#/components/schemas/NotFoundResponseBody",
+				"description": "Response type for this controllers object not found response"
+			},
+			"DataResponseBody_ReadResponseContent_RoleModelDTO.never.never_.Role.FoundResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/ReadResponseContent_RoleModelDTO.never.never_"
+					},
+					"message": {
+						"$ref": "#/components/schemas/FoundResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_Role_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RoleReadResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_ReadResponseContent_RoleModelDTO.never.never_.Role.FoundResponseMessageT_",
+				"description": "Possible responses for {@link RoleController.getRole}"
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-CreateResponseContentOmittedKeysT.keyofRoleModelDTO___": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"name",
+					"id",
+					"createdAt"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-CreateResponseContentOmittedKeysT.keyofRoleModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-CreateResponseContentOmittedKeysT.keyofRoleModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_RoleModelDTO.Extract_never-or-CreateResponseContentOmittedKeysT.keyofRoleModelDTO_.Extract_never-or-CreateResponseContentOptionalKeysT.keyofRoleModelDTO_.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-CreateResponseContentOmittedKeysT.keyofRoleModelDTO__"
+			},
+			"CreateResponseContent_RoleModelDTO.never.never_": {
+				"$ref": "#/components/schemas/TransformKeys_RoleModelDTO.Extract_never-or-CreateResponseContentOmittedKeysT.keyofRoleModelDTO_.Extract_never-or-CreateResponseContentOptionalKeysT.keyofRoleModelDTO_.never_"
+			},
+			"DataResponseBody_CreateResponseContent_RoleModelDTO.never.never_.Role.CreatedResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/CreateResponseContent_RoleModelDTO.never.never_"
+					},
+					"message": {
+						"$ref": "#/components/schemas/CreatedResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_Role_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RoleCreateResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_CreateResponseContent_RoleModelDTO.never.never_.Role.CreatedResponseMessageT_",
+				"description": "Possible responses for {@link RoleController.createRole}"
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-CreateRequestBodyOmittedKeysT.keyofRoleModelDTO___": {
+				"properties": {
+					"name": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-CreateRequestBodyOmittedKeysT.keyofRoleModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-CreateRequestBodyOmittedKeysT.keyofRoleModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_RoleModelDTO.Extract_never-or-CreateRequestBodyOmittedKeysT.keyofRoleModelDTO_.never.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-CreateRequestBodyOmittedKeysT.keyofRoleModelDTO__"
+			},
+			"CreateRequestBody_RoleModelDTO.never.never_": {
+				"$ref": "#/components/schemas/TransformKeys_RoleModelDTO.Extract_never-or-CreateRequestBodyOmittedKeysT.keyofRoleModelDTO_.never.never_"
+			},
+			"RoleCreateRequest": {
+				"$ref": "#/components/schemas/CreateRequestBody_RoleModelDTO.never.never_",
+				"description": "Request body format for {@link RoleController.createRole}'s `role` body parameter"
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofRoleModelDTO___": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"name",
+					"updatedAt",
+					"id",
+					"createdAt"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofRoleModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofRoleModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_RoleModelDTO.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofRoleModelDTO_.never.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofRoleModelDTO__"
+			},
+			"UpdateResponseContent_RoleModelDTO.never.never_": {
+				"$ref": "#/components/schemas/TransformKeys_RoleModelDTO.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofRoleModelDTO_.never.never_"
+			},
+			"DataResponseBody_UpdateResponseContent_RoleModelDTO.never.never_.Role.UpdatedResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/UpdateResponseContent_RoleModelDTO.never.never_"
+					},
+					"message": {
+						"$ref": "#/components/schemas/UpdatedResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_Role_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RoleUpdateResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_UpdateResponseContent_RoleModelDTO.never.never_.Role.UpdatedResponseMessageT_",
+				"description": "Possible responses for {@link RoleController.updateRole}"
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-UpdateRequestBodyOmittedKeysT.keyofRoleModelDTO___": {
+				"properties": {
+					"name": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-UpdateRequestBodyOmittedKeysT.keyofRoleModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-UpdateRequestBodyOmittedKeysT.keyofRoleModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_Partial_RoleModelDTO_.Extract_never-or-UpdateRequestBodyOmittedKeysT.keyofRoleModelDTO_.never.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-UpdateRequestBodyOmittedKeysT.keyofRoleModelDTO__"
+			},
+			"UpdateRequestBody_RoleModelDTO.never.never_": {
+				"$ref": "#/components/schemas/TransformKeys_Partial_RoleModelDTO_.Extract_never-or-UpdateRequestBodyOmittedKeysT.keyofRoleModelDTO_.never.never_",
+				"description": "Represents the {@link DataResponseBody} for a successful `update` route response"
+			},
+			"RoleUpdateRequest": {
+				"$ref": "#/components/schemas/UpdateRequestBody_RoleModelDTO.never.never_",
+				"description": "Request body format for {@link RoleController.updateRole}'s `role` body parameter"
+			},
+			"DataResponseBody_DeletedResponseContent.Role.DeletedResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/DeletedResponseContent"
+					},
+					"message": {
+						"$ref": "#/components/schemas/DeletedResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_Role_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DeleteResponseBody_Role_": {
+				"$ref": "#/components/schemas/DataResponseBody_DeletedResponseContent.Role.DeletedResponseMessageT_",
+				"description": "Represents the {@link DataResponseBody} for a successful `delete` route response"
+			},
+			"RoleDeleteResponse": {
+				"$ref": "#/components/schemas/DeleteResponseBody_Role_",
+				"description": "Possible responses for {@link RoleController.deleteRole}"
+			},
+			"NonEmptyString": {
+				"type": "string",
+				"description": "Represents a non-empty string"
+			},
+			"Record_string.boolean_": {
+				"properties": {},
+				"additionalProperties": {
+					"type": "boolean"
+				},
+				"type": "object",
+				"description": "Construct a type with a set of properties K of type T"
+			},
+			"UserModelDTO": {
+				"description": "DTO Model for Sequalize Model {@link data /models/models.UserModel}",
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"deletedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"#shouldValidate": {
+						"$ref": "#/components/schemas/Record_string.boolean_"
+					},
+					"firstName": {
+						"$ref": "#/components/schemas/NonEmptyString"
+					},
+					"lastName": {
+						"$ref": "#/components/schemas/NonEmptyString"
+					},
+					"email": {
+						"$ref": "#/components/schemas/NonEmptyString"
+					},
+					"password": {
+						"$ref": "#/components/schemas/NonEmptyString"
+					},
+					"profileImageURL": {
+						"type": "string"
+					},
+					"profileText": {
+						"type": "string"
+					},
+					"fullName": {
+						"type": "string"
+					},
+					"isAdmin": {
+						"type": "boolean"
+					},
+					"isStaff": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"id",
+					"createdAt",
+					"updatedAt",
+					"firstName",
+					"lastName",
+					"email",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-ReadResponseContentOmittedKeysT.keyofFeedbackModelDTO___": {
+				"properties": {
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"authorName": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"content": {
+						"type": "string"
+					},
+					"isPublic": {
+						"type": "boolean"
+					},
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"user": {
+						"$ref": "#/components/schemas/UserModelDTO"
+					}
+				},
+				"required": [
+					"id",
+					"createdAt",
+					"title",
+					"content",
+					"isPublic"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-ReadResponseContentOmittedKeysT.keyofFeedbackModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-ReadResponseContentOmittedKeysT.keyofFeedbackModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_FeedbackModelDTO.Extract_never-or-ReadResponseContentOmittedKeysT.keyofFeedbackModelDTO_.Extract_never-or-ReadResponseContentOptionalKeysT.keyofFeedbackModelDTO_.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-ReadResponseContentOmittedKeysT.keyofFeedbackModelDTO__"
+			},
+			"ReadResponseContent_FeedbackModelDTO.never.never_": {
+				"$ref": "#/components/schemas/TransformKeys_FeedbackModelDTO.Extract_never-or-ReadResponseContentOmittedKeysT.keyofFeedbackModelDTO_.Extract_never-or-ReadResponseContentOptionalKeysT.keyofFeedbackModelDTO_.never_"
+			},
+			"MetaData_Feedback_": {
+				"description": "Represents metadata for the data returned",
+				"properties": {
+					"dataType": {
+						"type": "string",
+						"enum": [
+							"Feedback"
+						],
+						"nullable": false
+					}
+				},
+				"required": [
+					"dataType"
+				],
+				"type": "object",
+				"additionalProperties": {
+					"anyOf": [
+						{
+							"additionalProperties": false,
+							"type": "object"
+						},
+						{
+							"type": "string"
+						},
+						{
+							"type": "number",
+							"format": "double"
+						},
+						{
+							"type": "boolean"
+						}
+					],
+					"nullable": true
+				}
+			},
+			"DataResponseBody_Array_ReadResponseContent_FeedbackModelDTO.never.never__.Feedback.FoundResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/ReadResponseContent_FeedbackModelDTO.never.never_"
+						},
+						"type": "array"
+					},
+					"message": {
+						"$ref": "#/components/schemas/FoundResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_Feedback_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"FeedbackReadManyResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_Array_ReadResponseContent_FeedbackModelDTO.never.never__.Feedback.FoundResponseMessageT_",
+				"description": "Possible responses for {@link FeedbackController.getAllFeedbacks}"
+			},
+			"FeedbackNotFoundResponseBody": {
+				"$ref": "#/components/schemas/NotFoundResponseBody",
+				"description": "Response type for this controllers object not found response"
+			},
+			"DataResponseBody_ReadResponseContent_FeedbackModelDTO.never.never_.Feedback.FoundResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/ReadResponseContent_FeedbackModelDTO.never.never_"
+					},
+					"message": {
+						"$ref": "#/components/schemas/FoundResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_Feedback_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"FeedbackReadResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_ReadResponseContent_FeedbackModelDTO.never.never_.Feedback.FoundResponseMessageT_",
+				"description": "Possible responses for {@link FeedbackController.getFeedback}"
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-CreateResponseContentOmittedKeysT.keyofFeedbackModelDTO___": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"authorName": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"content": {
+						"type": "string"
+					},
+					"isPublic": {
+						"type": "boolean"
+					},
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"user": {
+						"$ref": "#/components/schemas/UserModelDTO"
+					}
+				},
+				"required": [
+					"id",
+					"createdAt",
+					"title",
+					"content",
+					"isPublic"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-CreateResponseContentOmittedKeysT.keyofFeedbackModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-CreateResponseContentOmittedKeysT.keyofFeedbackModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_FeedbackModelDTO.Extract_never-or-CreateResponseContentOmittedKeysT.keyofFeedbackModelDTO_.Extract_never-or-CreateResponseContentOptionalKeysT.keyofFeedbackModelDTO_.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-CreateResponseContentOmittedKeysT.keyofFeedbackModelDTO__"
+			},
+			"CreateResponseContent_FeedbackModelDTO.never.never_": {
+				"$ref": "#/components/schemas/TransformKeys_FeedbackModelDTO.Extract_never-or-CreateResponseContentOmittedKeysT.keyofFeedbackModelDTO_.Extract_never-or-CreateResponseContentOptionalKeysT.keyofFeedbackModelDTO_.never_"
+			},
+			"DataResponseBody_CreateResponseContent_FeedbackModelDTO.never.never_.Feedback.CreatedResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/CreateResponseContent_FeedbackModelDTO.never.never_"
+					},
+					"message": {
+						"$ref": "#/components/schemas/CreatedResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_Feedback_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"FeedbackCreateResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_CreateResponseContent_FeedbackModelDTO.never.never_.Feedback.CreatedResponseMessageT_",
+				"description": "Possible responses for {@link FeedbackController.createFeedback}"
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-CreateRequestBodyOmittedKeysT.keyofFeedbackModelDTO___": {
+				"properties": {
+					"authorName": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"content": {
+						"type": "string"
+					},
+					"isPublic": {
+						"type": "boolean"
+					},
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"user": {
+						"$ref": "#/components/schemas/UserModelDTO"
+					}
+				},
+				"required": [
+					"title",
+					"content"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-CreateRequestBodyOmittedKeysT.keyofFeedbackModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-CreateRequestBodyOmittedKeysT.keyofFeedbackModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_FeedbackModelDTO.Extract_never-or-CreateRequestBodyOmittedKeysT.keyofFeedbackModelDTO_.isPublic-or-userId.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-CreateRequestBodyOmittedKeysT.keyofFeedbackModelDTO__"
+			},
+			"CreateRequestBody_FeedbackModelDTO.never.isPublic-or-userId_": {
+				"$ref": "#/components/schemas/TransformKeys_FeedbackModelDTO.Extract_never-or-CreateRequestBodyOmittedKeysT.keyofFeedbackModelDTO_.isPublic-or-userId.never_"
+			},
+			"FeedbackCreateRequest": {
+				"$ref": "#/components/schemas/CreateRequestBody_FeedbackModelDTO.never.isPublic-or-userId_",
+				"description": "Request body format for {@link FeedbackController.createFeedback}'s `feedback` body parameter"
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofFeedbackModelDTO___": {
+				"properties": {
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"authorName": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"content": {
+						"type": "string"
+					},
+					"isPublic": {
+						"type": "boolean"
+					},
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"user": {
+						"$ref": "#/components/schemas/UserModelDTO"
+					}
+				},
+				"required": [
+					"updatedAt",
+					"id",
+					"createdAt",
+					"title",
+					"content",
+					"isPublic"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofFeedbackModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofFeedbackModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_FeedbackModelDTO.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofFeedbackModelDTO_.never.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofFeedbackModelDTO__"
+			},
+			"UpdateResponseContent_FeedbackModelDTO.never.never_": {
+				"$ref": "#/components/schemas/TransformKeys_FeedbackModelDTO.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofFeedbackModelDTO_.never.never_"
+			},
+			"DataResponseBody_UpdateResponseContent_FeedbackModelDTO.never.never_.Feedback.UpdatedResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/UpdateResponseContent_FeedbackModelDTO.never.never_"
+					},
+					"message": {
+						"$ref": "#/components/schemas/UpdatedResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_Feedback_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"FeedbackUpdateResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_UpdateResponseContent_FeedbackModelDTO.never.never_.Feedback.UpdatedResponseMessageT_",
+				"description": "Possible responses for {@link FeedbackController.updateFeedback}"
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-UpdateRequestBodyOmittedKeysT.keyofFeedbackModelDTO___": {
+				"properties": {
+					"authorName": {
+						"type": "string"
+					},
+					"title": {
+						"type": "string"
+					},
+					"content": {
+						"type": "string"
+					},
+					"isPublic": {
+						"type": "boolean"
+					},
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"user": {
+						"$ref": "#/components/schemas/UserModelDTO"
+					}
+				},
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-UpdateRequestBodyOmittedKeysT.keyofFeedbackModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-UpdateRequestBodyOmittedKeysT.keyofFeedbackModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_Partial_FeedbackModelDTO_.Extract_never-or-UpdateRequestBodyOmittedKeysT.keyofFeedbackModelDTO_.never.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-UpdateRequestBodyOmittedKeysT.keyofFeedbackModelDTO__"
+			},
+			"UpdateRequestBody_FeedbackModelDTO.never.never_": {
+				"$ref": "#/components/schemas/TransformKeys_Partial_FeedbackModelDTO_.Extract_never-or-UpdateRequestBodyOmittedKeysT.keyofFeedbackModelDTO_.never.never_",
+				"description": "Represents the {@link DataResponseBody} for a successful `update` route response"
+			},
+			"FeedbackUpdateRequest": {
+				"$ref": "#/components/schemas/UpdateRequestBody_FeedbackModelDTO.never.never_",
+				"description": "Request body format for {@link FeedbackController.updateFeedback}'s `feedback` body parameter"
+			},
+			"DataResponseBody_DeletedResponseContent.Feedback.DeletedResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/DeletedResponseContent"
+					},
+					"message": {
+						"$ref": "#/components/schemas/DeletedResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_Feedback_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DeleteResponseBody_Feedback_": {
+				"$ref": "#/components/schemas/DataResponseBody_DeletedResponseContent.Feedback.DeletedResponseMessageT_",
+				"description": "Represents the {@link DataResponseBody} for a successful `delete` route response"
+			},
+			"FeedbackDeleteResponse": {
+				"$ref": "#/components/schemas/DeleteResponseBody_Feedback_",
+				"description": "Possible responses for {@link FeedbackController.deleteFeedback}"
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-ReadResponseContentOmittedKeysT.keyofBookingTypeModelDTO___": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"description": {
+						"type": "string"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"name",
+					"id",
+					"createdAt",
+					"description",
+					"price"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-ReadResponseContentOmittedKeysT.keyofBookingTypeModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-ReadResponseContentOmittedKeysT.keyofBookingTypeModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_BookingTypeModelDTO.Extract_never-or-ReadResponseContentOmittedKeysT.keyofBookingTypeModelDTO_.Extract_never-or-ReadResponseContentOptionalKeysT.keyofBookingTypeModelDTO_.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-ReadResponseContentOmittedKeysT.keyofBookingTypeModelDTO__"
+			},
+			"ReadResponseContent_BookingTypeModelDTO.never.never_": {
+				"$ref": "#/components/schemas/TransformKeys_BookingTypeModelDTO.Extract_never-or-ReadResponseContentOmittedKeysT.keyofBookingTypeModelDTO_.Extract_never-or-ReadResponseContentOptionalKeysT.keyofBookingTypeModelDTO_.never_"
+			},
+			"MetaData_BookingType_": {
+				"description": "Represents metadata for the data returned",
+				"properties": {
+					"dataType": {
+						"type": "string",
+						"enum": [
+							"BookingType"
+						],
+						"nullable": false
+					}
+				},
+				"required": [
+					"dataType"
+				],
+				"type": "object",
+				"additionalProperties": {
+					"anyOf": [
+						{
+							"additionalProperties": false,
+							"type": "object"
+						},
+						{
+							"type": "string"
+						},
+						{
+							"type": "number",
+							"format": "double"
+						},
+						{
+							"type": "boolean"
+						}
+					],
+					"nullable": true
+				}
+			},
+			"DataResponseBody_Array_ReadResponseContent_BookingTypeModelDTO.never.never__.BookingType.FoundResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/ReadResponseContent_BookingTypeModelDTO.never.never_"
+						},
+						"type": "array"
+					},
+					"message": {
+						"$ref": "#/components/schemas/FoundResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_BookingType_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"BookingTypeReadManyResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_Array_ReadResponseContent_BookingTypeModelDTO.never.never__.BookingType.FoundResponseMessageT_",
+				"description": "Possible responses for {@link BookingTypeController.getAllBookingTypes}"
+			},
+			"BookingTypeNotFoundResponseBody": {
+				"$ref": "#/components/schemas/NotFoundResponseBody",
+				"description": "Response type for this controllers object not found response"
+			},
+			"DataResponseBody_ReadResponseContent_BookingTypeModelDTO.never.never_.BookingType.FoundResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/ReadResponseContent_BookingTypeModelDTO.never.never_"
+					},
+					"message": {
+						"$ref": "#/components/schemas/FoundResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_BookingType_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"BookingTypeReadResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_ReadResponseContent_BookingTypeModelDTO.never.never_.BookingType.FoundResponseMessageT_",
+				"description": "Possible responses for {@link BookingTypeController.getBookingType}"
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-CreateResponseContentOmittedKeysT.keyofBookingTypeModelDTO___": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"description": {
+						"type": "string"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"name",
+					"id",
+					"createdAt",
+					"description",
+					"price"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-CreateResponseContentOmittedKeysT.keyofBookingTypeModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-CreateResponseContentOmittedKeysT.keyofBookingTypeModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_BookingTypeModelDTO.Extract_never-or-CreateResponseContentOmittedKeysT.keyofBookingTypeModelDTO_.Extract_never-or-CreateResponseContentOptionalKeysT.keyofBookingTypeModelDTO_.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-CreateResponseContentOmittedKeysT.keyofBookingTypeModelDTO__"
+			},
+			"CreateResponseContent_BookingTypeModelDTO.never.never_": {
+				"$ref": "#/components/schemas/TransformKeys_BookingTypeModelDTO.Extract_never-or-CreateResponseContentOmittedKeysT.keyofBookingTypeModelDTO_.Extract_never-or-CreateResponseContentOptionalKeysT.keyofBookingTypeModelDTO_.never_"
+			},
+			"DataResponseBody_CreateResponseContent_BookingTypeModelDTO.never.never_.BookingType.CreatedResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/CreateResponseContent_BookingTypeModelDTO.never.never_"
+					},
+					"message": {
+						"$ref": "#/components/schemas/CreatedResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_BookingType_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"BookingTypeCreateResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_CreateResponseContent_BookingTypeModelDTO.never.never_.BookingType.CreatedResponseMessageT_",
+				"description": "Possible responses for {@link BookingTypeController.createBookingType}"
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-CreateRequestBodyOmittedKeysT.keyofBookingTypeModelDTO___": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"name",
+					"description",
+					"price"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-CreateRequestBodyOmittedKeysT.keyofBookingTypeModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-CreateRequestBodyOmittedKeysT.keyofBookingTypeModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_BookingTypeModelDTO.Extract_never-or-CreateRequestBodyOmittedKeysT.keyofBookingTypeModelDTO_.never.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-CreateRequestBodyOmittedKeysT.keyofBookingTypeModelDTO__"
+			},
+			"CreateRequestBody_BookingTypeModelDTO.never.never_": {
+				"$ref": "#/components/schemas/TransformKeys_BookingTypeModelDTO.Extract_never-or-CreateRequestBodyOmittedKeysT.keyofBookingTypeModelDTO_.never.never_"
+			},
+			"BookingTypeCreateRequest": {
+				"$ref": "#/components/schemas/CreateRequestBody_BookingTypeModelDTO.never.never_",
+				"description": "Request body format for {@link BookingTypeController.createBookingType}'s `bookingType` body parameter"
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofBookingTypeModelDTO___": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"description": {
+						"type": "string"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"name",
+					"updatedAt",
+					"id",
+					"createdAt",
+					"description",
+					"price"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofBookingTypeModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofBookingTypeModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_BookingTypeModelDTO.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofBookingTypeModelDTO_.never.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofBookingTypeModelDTO__"
+			},
+			"UpdateResponseContent_BookingTypeModelDTO.never.never_": {
+				"$ref": "#/components/schemas/TransformKeys_BookingTypeModelDTO.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofBookingTypeModelDTO_.never.never_"
+			},
+			"DataResponseBody_UpdateResponseContent_BookingTypeModelDTO.never.never_.BookingType.UpdatedResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/UpdateResponseContent_BookingTypeModelDTO.never.never_"
+					},
+					"message": {
+						"$ref": "#/components/schemas/UpdatedResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_BookingType_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"BookingTypeUpdateResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_UpdateResponseContent_BookingTypeModelDTO.never.never_.BookingType.UpdatedResponseMessageT_",
+				"description": "Possible responses for {@link BookingTypeController.updateBookingType}"
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-UpdateRequestBodyOmittedKeysT.keyofBookingTypeModelDTO___": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-UpdateRequestBodyOmittedKeysT.keyofBookingTypeModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-UpdateRequestBodyOmittedKeysT.keyofBookingTypeModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_Partial_BookingTypeModelDTO_.Extract_never-or-UpdateRequestBodyOmittedKeysT.keyofBookingTypeModelDTO_.never.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-UpdateRequestBodyOmittedKeysT.keyofBookingTypeModelDTO__"
+			},
+			"UpdateRequestBody_BookingTypeModelDTO.never.never_": {
+				"$ref": "#/components/schemas/TransformKeys_Partial_BookingTypeModelDTO_.Extract_never-or-UpdateRequestBodyOmittedKeysT.keyofBookingTypeModelDTO_.never.never_",
+				"description": "Represents the {@link DataResponseBody} for a successful `update` route response"
+			},
+			"BookingTypeUpdateRequest": {
+				"$ref": "#/components/schemas/UpdateRequestBody_BookingTypeModelDTO.never.never_",
+				"description": "Request body format for {@link BookingTypeController.updateBookingType}'s `bookingType` body parameter"
+			},
+			"DataResponseBody_DeletedResponseContent.BookingType.DeletedResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/DeletedResponseContent"
+					},
+					"message": {
+						"$ref": "#/components/schemas/DeletedResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_BookingType_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DeleteResponseBody_BookingType_": {
+				"$ref": "#/components/schemas/DataResponseBody_DeletedResponseContent.BookingType.DeletedResponseMessageT_",
+				"description": "Represents the {@link DataResponseBody} for a successful `delete` route response"
+			},
+			"BookingTypeDeleteResponse": {
+				"$ref": "#/components/schemas/DeleteResponseBody_BookingType_",
+				"description": "Possible responses for {@link BookingTypeController.deleteBookingType}"
+			},
+			"BookingTypeModelDTO": {
+				"description": "DTO Model for Sequalize Model {@link data /models/models.BookingTypeModel}",
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"deletedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"#shouldValidate": {
+						"$ref": "#/components/schemas/Record_string.boolean_"
+					},
+					"name": {
+						"$ref": "#/components/schemas/NonEmptyString"
+					},
+					"description": {
+						"$ref": "#/components/schemas/NonEmptyString"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id",
+					"createdAt",
+					"updatedAt",
+					"name",
+					"description",
+					"price"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-ReadResponseContentOmittedKeysT.keyofBookingModelDTO___": {
+				"properties": {
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"user": {
+						"$ref": "#/components/schemas/UserModelDTO"
+					},
+					"bookingDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"bookingNotes": {
+						"type": "string"
+					},
+					"bookingTypeId": {
+						"type": "number",
+						"format": "double"
+					},
+					"bookingType": {
+						"$ref": "#/components/schemas/BookingTypeModelDTO"
+					}
+				},
+				"required": [
+					"id",
+					"createdAt",
+					"userId",
+					"bookingDate",
+					"bookingTypeId"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-ReadResponseContentOmittedKeysT.keyofBookingModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-ReadResponseContentOmittedKeysT.keyofBookingModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_BookingModelDTO.Extract_never-or-ReadResponseContentOmittedKeysT.keyofBookingModelDTO_.Extract_never-or-ReadResponseContentOptionalKeysT.keyofBookingModelDTO_.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-ReadResponseContentOmittedKeysT.keyofBookingModelDTO__"
+			},
+			"ReadResponseContent_BookingModelDTO.never.never_": {
+				"$ref": "#/components/schemas/TransformKeys_BookingModelDTO.Extract_never-or-ReadResponseContentOmittedKeysT.keyofBookingModelDTO_.Extract_never-or-ReadResponseContentOptionalKeysT.keyofBookingModelDTO_.never_"
+			},
+			"MetaData_Booking_": {
+				"description": "Represents metadata for the data returned",
+				"properties": {
+					"dataType": {
+						"type": "string",
+						"enum": [
+							"Booking"
+						],
+						"nullable": false
+					}
+				},
+				"required": [
+					"dataType"
+				],
+				"type": "object",
+				"additionalProperties": {
+					"anyOf": [
+						{
+							"additionalProperties": false,
+							"type": "object"
+						},
+						{
+							"type": "string"
+						},
+						{
+							"type": "number",
+							"format": "double"
+						},
+						{
+							"type": "boolean"
+						}
+					],
+					"nullable": true
+				}
+			},
+			"DataResponseBody_Array_ReadResponseContent_BookingModelDTO.never.never__.Booking.FoundResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/ReadResponseContent_BookingModelDTO.never.never_"
+						},
+						"type": "array"
+					},
+					"message": {
+						"$ref": "#/components/schemas/FoundResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_Booking_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"BookingReadManyResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_Array_ReadResponseContent_BookingModelDTO.never.never__.Booking.FoundResponseMessageT_",
+				"description": "Possible responses for {@link BookingController.getAllBookings}"
+			},
+			"BookingNotFoundResponseBody": {
+				"$ref": "#/components/schemas/NotFoundResponseBody",
+				"description": "Response type for this controllers object not found response"
+			},
+			"DataResponseBody_ReadResponseContent_BookingModelDTO.never.never_.Booking.FoundResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/ReadResponseContent_BookingModelDTO.never.never_"
+					},
+					"message": {
+						"$ref": "#/components/schemas/FoundResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_Booking_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"BookingReadResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_ReadResponseContent_BookingModelDTO.never.never_.Booking.FoundResponseMessageT_",
+				"description": "Possible responses for {@link BookingController.getBooking}"
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-CreateResponseContentOmittedKeysT.keyofBookingModelDTO___": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"user": {
+						"$ref": "#/components/schemas/UserModelDTO"
+					},
+					"bookingDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"bookingNotes": {
+						"type": "string"
+					},
+					"bookingTypeId": {
+						"type": "number",
+						"format": "double"
+					},
+					"bookingType": {
+						"$ref": "#/components/schemas/BookingTypeModelDTO"
+					}
+				},
+				"required": [
+					"id",
+					"createdAt",
+					"userId",
+					"bookingDate",
+					"bookingTypeId"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-CreateResponseContentOmittedKeysT.keyofBookingModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-CreateResponseContentOmittedKeysT.keyofBookingModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_BookingModelDTO.Extract_never-or-CreateResponseContentOmittedKeysT.keyofBookingModelDTO_.Extract_never-or-CreateResponseContentOptionalKeysT.keyofBookingModelDTO_.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-CreateResponseContentOmittedKeysT.keyofBookingModelDTO__"
+			},
+			"CreateResponseContent_BookingModelDTO.never.never_": {
+				"$ref": "#/components/schemas/TransformKeys_BookingModelDTO.Extract_never-or-CreateResponseContentOmittedKeysT.keyofBookingModelDTO_.Extract_never-or-CreateResponseContentOptionalKeysT.keyofBookingModelDTO_.never_"
+			},
+			"DataResponseBody_CreateResponseContent_BookingModelDTO.never.never_.Booking.CreatedResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/CreateResponseContent_BookingModelDTO.never.never_"
+					},
+					"message": {
+						"$ref": "#/components/schemas/CreatedResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_Booking_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"BookingCreateResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_CreateResponseContent_BookingModelDTO.never.never_.Booking.CreatedResponseMessageT_",
+				"description": "Possible responses for {@link BookingController.createBooking}"
+			},
+			"Pick_any.Exclude_keyofany.Extract_bookingType-or-CreateRequestBodyOmittedKeysT.keyofBookingModelDTO___": {
+				"properties": {
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"user": {
+						"$ref": "#/components/schemas/UserModelDTO"
+					},
+					"bookingDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"bookingNotes": {
+						"type": "string"
+					},
+					"bookingTypeId": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"userId",
+					"bookingDate",
+					"bookingTypeId"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_bookingType-or-CreateRequestBodyOmittedKeysT.keyofBookingModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_bookingType-or-CreateRequestBodyOmittedKeysT.keyofBookingModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_BookingModelDTO.Extract_bookingType-or-CreateRequestBodyOmittedKeysT.keyofBookingModelDTO_.never.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_bookingType-or-CreateRequestBodyOmittedKeysT.keyofBookingModelDTO__"
+			},
+			"CreateRequestBody_BookingModelDTO.bookingType.never_": {
+				"$ref": "#/components/schemas/TransformKeys_BookingModelDTO.Extract_bookingType-or-CreateRequestBodyOmittedKeysT.keyofBookingModelDTO_.never.never_"
+			},
+			"BookingCreateRequest": {
+				"$ref": "#/components/schemas/CreateRequestBody_BookingModelDTO.bookingType.never_",
+				"description": "Request body format for {@link BookingController.createBooking}'s `booking` body parameter"
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofBookingModelDTO___": {
+				"properties": {
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"user": {
+						"$ref": "#/components/schemas/UserModelDTO"
+					},
+					"bookingDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"bookingNotes": {
+						"type": "string"
+					},
+					"bookingTypeId": {
+						"type": "number",
+						"format": "double"
+					},
+					"bookingType": {
+						"$ref": "#/components/schemas/BookingTypeModelDTO"
+					}
+				},
+				"required": [
+					"updatedAt",
+					"id",
+					"createdAt",
+					"userId",
+					"bookingDate",
+					"bookingTypeId"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofBookingModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofBookingModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_BookingModelDTO.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofBookingModelDTO_.never.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofBookingModelDTO__"
+			},
+			"UpdateResponseContent_BookingModelDTO.never.never_": {
+				"$ref": "#/components/schemas/TransformKeys_BookingModelDTO.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofBookingModelDTO_.never.never_"
+			},
+			"DataResponseBody_UpdateResponseContent_BookingModelDTO.never.never_.Booking.UpdatedResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/UpdateResponseContent_BookingModelDTO.never.never_"
+					},
+					"message": {
+						"$ref": "#/components/schemas/UpdatedResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_Booking_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"BookingUpdateResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_UpdateResponseContent_BookingModelDTO.never.never_.Booking.UpdatedResponseMessageT_",
+				"description": "Possible responses for {@link BookingController.updateBooking}"
+			},
+			"Pick_any.Exclude_keyofany.Extract_bookingType-or-UpdateRequestBodyOmittedKeysT.keyofBookingModelDTO___": {
+				"properties": {
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"user": {
+						"$ref": "#/components/schemas/UserModelDTO"
+					},
+					"bookingDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"bookingNotes": {
+						"type": "string"
+					},
+					"bookingTypeId": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_bookingType-or-UpdateRequestBodyOmittedKeysT.keyofBookingModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_bookingType-or-UpdateRequestBodyOmittedKeysT.keyofBookingModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_Partial_BookingModelDTO_.Extract_bookingType-or-UpdateRequestBodyOmittedKeysT.keyofBookingModelDTO_.never.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_bookingType-or-UpdateRequestBodyOmittedKeysT.keyofBookingModelDTO__"
+			},
+			"UpdateRequestBody_BookingModelDTO.bookingType.never_": {
+				"$ref": "#/components/schemas/TransformKeys_Partial_BookingModelDTO_.Extract_bookingType-or-UpdateRequestBodyOmittedKeysT.keyofBookingModelDTO_.never.never_",
+				"description": "Represents the {@link DataResponseBody} for a successful `update` route response"
+			},
+			"BookingUpdateRequest": {
+				"$ref": "#/components/schemas/UpdateRequestBody_BookingModelDTO.bookingType.never_",
+				"description": "Request body format for {@link BookingController.updateBooking}'s `booking` body parameter"
+			},
+			"DataResponseBody_DeletedResponseContent.Booking.DeletedResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/DeletedResponseContent"
+					},
+					"message": {
+						"$ref": "#/components/schemas/DeletedResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_Booking_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DeleteResponseBody_Booking_": {
+				"$ref": "#/components/schemas/DataResponseBody_DeletedResponseContent.Booking.DeletedResponseMessageT_",
+				"description": "Represents the {@link DataResponseBody} for a successful `delete` route response"
+			},
+			"BookingDeleteResponse": {
+				"$ref": "#/components/schemas/DeleteResponseBody_Booking_",
+				"description": "Possible responses for {@link BookingController.deleteBooking}"
+			},
+			"TagModelDTO": {
+				"description": "DTO Model for Sequalize Model {@link data /models/models.TagModel}",
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"deletedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"#shouldValidate": {
+						"$ref": "#/components/schemas/Record_string.boolean_"
+					},
+					"name": {
+						"$ref": "#/components/schemas/NonEmptyString"
+					},
+					"cssColour": {
+						"$ref": "#/components/schemas/NonEmptyString"
+					}
+				},
+				"required": [
+					"id",
+					"createdAt",
+					"updatedAt",
+					"name",
+					"cssColour"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-ReadResponseContentOmittedKeysT.keyofBlogModelDTO___": {
+				"properties": {
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"title": {
+						"type": "string"
+					},
+					"content": {
+						"type": "string"
+					},
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"user": {
+						"$ref": "#/components/schemas/UserModelDTO"
+					},
+					"imageURL": {
+						"type": "string"
+					},
+					"publishedDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"isPublished": {
+						"type": "boolean"
+					},
+					"tags": {
+						"items": {
+							"$ref": "#/components/schemas/TagModelDTO"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"createdAt",
+					"title",
+					"content",
+					"userId",
+					"isPublished"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-ReadResponseContentOmittedKeysT.keyofBlogModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-ReadResponseContentOmittedKeysT.keyofBlogModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_BlogModelDTO.Extract_never-or-ReadResponseContentOmittedKeysT.keyofBlogModelDTO_.Extract_imageURL-or-publishedDate-or-ReadResponseContentOptionalKeysT.keyofBlogModelDTO_.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-ReadResponseContentOmittedKeysT.keyofBlogModelDTO__"
+			},
+			"ReadResponseContent_BlogModelDTO.never.imageURL-or-publishedDate_": {
+				"$ref": "#/components/schemas/TransformKeys_BlogModelDTO.Extract_never-or-ReadResponseContentOmittedKeysT.keyofBlogModelDTO_.Extract_imageURL-or-publishedDate-or-ReadResponseContentOptionalKeysT.keyofBlogModelDTO_.never_"
+			},
+			"MetaData_Blog_": {
+				"description": "Represents metadata for the data returned",
+				"properties": {
+					"dataType": {
+						"type": "string",
+						"enum": [
+							"Blog"
+						],
+						"nullable": false
+					}
+				},
+				"required": [
+					"dataType"
+				],
+				"type": "object",
+				"additionalProperties": {
+					"anyOf": [
+						{
+							"additionalProperties": false,
+							"type": "object"
+						},
+						{
+							"type": "string"
+						},
+						{
+							"type": "number",
+							"format": "double"
+						},
+						{
+							"type": "boolean"
+						}
+					],
+					"nullable": true
+				}
+			},
+			"DataResponseBody_Array_ReadResponseContent_BlogModelDTO.never.imageURL-or-publishedDate__.Blog.FoundResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"items": {
+							"$ref": "#/components/schemas/ReadResponseContent_BlogModelDTO.never.imageURL-or-publishedDate_"
+						},
+						"type": "array"
+					},
+					"message": {
+						"$ref": "#/components/schemas/FoundResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_Blog_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"BlogReadManyResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_Array_ReadResponseContent_BlogModelDTO.never.imageURL-or-publishedDate__.Blog.FoundResponseMessageT_",
+				"description": "Possible responses for {@link BlogController.getAllBlogs}"
+			},
+			"BlogNotFoundResponseBody": {
+				"$ref": "#/components/schemas/NotFoundResponseBody",
+				"description": "Response type for this controllers object not found response"
+			},
+			"DataResponseBody_ReadResponseContent_BlogModelDTO.never.imageURL-or-publishedDate_.Blog.FoundResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/ReadResponseContent_BlogModelDTO.never.imageURL-or-publishedDate_"
+					},
+					"message": {
+						"$ref": "#/components/schemas/FoundResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_Blog_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"BlogReadResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_ReadResponseContent_BlogModelDTO.never.imageURL-or-publishedDate_.Blog.FoundResponseMessageT_",
+				"description": "Possible responses for {@link BlogController.getBlog}"
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-CreateResponseContentOmittedKeysT.keyofBlogModelDTO___": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"title": {
+						"type": "string"
+					},
+					"content": {
+						"type": "string"
+					},
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"user": {
+						"$ref": "#/components/schemas/UserModelDTO"
+					},
+					"imageURL": {
+						"type": "string"
+					},
+					"publishedDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"isPublished": {
+						"type": "boolean"
+					},
+					"tags": {
+						"items": {
+							"$ref": "#/components/schemas/TagModelDTO"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"createdAt",
+					"title",
+					"content",
+					"userId",
+					"isPublished"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-CreateResponseContentOmittedKeysT.keyofBlogModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-CreateResponseContentOmittedKeysT.keyofBlogModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_BlogModelDTO.Extract_never-or-CreateResponseContentOmittedKeysT.keyofBlogModelDTO_.Extract_imageURL-or-publishedDate-or-CreateResponseContentOptionalKeysT.keyofBlogModelDTO_.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-CreateResponseContentOmittedKeysT.keyofBlogModelDTO__"
+			},
+			"CreateResponseContent_BlogModelDTO.never.imageURL-or-publishedDate_": {
+				"$ref": "#/components/schemas/TransformKeys_BlogModelDTO.Extract_never-or-CreateResponseContentOmittedKeysT.keyofBlogModelDTO_.Extract_imageURL-or-publishedDate-or-CreateResponseContentOptionalKeysT.keyofBlogModelDTO_.never_"
+			},
+			"DataResponseBody_CreateResponseContent_BlogModelDTO.never.imageURL-or-publishedDate_.Blog.CreatedResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/CreateResponseContent_BlogModelDTO.never.imageURL-or-publishedDate_"
+					},
+					"message": {
+						"$ref": "#/components/schemas/CreatedResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_Blog_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"BlogCreateResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_CreateResponseContent_BlogModelDTO.never.imageURL-or-publishedDate_.Blog.CreatedResponseMessageT_",
+				"description": "Possible responses for {@link BlogController.createBlog}"
+			},
+			"Pick_any.Exclude_keyofany.Extract_user-or-tags-or-CreateRequestBodyOmittedKeysT.keyofBlogModelDTO___": {
+				"properties": {
+					"title": {
+						"type": "string"
+					},
+					"content": {
+						"type": "string"
+					},
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"imageURL": {
+						"type": "string"
+					},
+					"publishedDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"isPublished": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"title",
+					"content",
+					"userId",
+					"isPublished"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_user-or-tags-or-CreateRequestBodyOmittedKeysT.keyofBlogModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_user-or-tags-or-CreateRequestBodyOmittedKeysT.keyofBlogModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_BlogModelDTO.Extract_user-or-tags-or-CreateRequestBodyOmittedKeysT.keyofBlogModelDTO_.imageURL-or-publishedDate.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_user-or-tags-or-CreateRequestBodyOmittedKeysT.keyofBlogModelDTO__"
+			},
+			"CreateRequestBody_BlogModelDTO.user-or-tags.imageURL-or-publishedDate_": {
+				"$ref": "#/components/schemas/TransformKeys_BlogModelDTO.Extract_user-or-tags-or-CreateRequestBodyOmittedKeysT.keyofBlogModelDTO_.imageURL-or-publishedDate.never_"
+			},
+			"BlogCreateRequest": {
+				"$ref": "#/components/schemas/CreateRequestBody_BlogModelDTO.user-or-tags.imageURL-or-publishedDate_",
+				"description": "Request body format for {@link BlogController.createBlog}'s `blog` body parameter"
+			},
+			"Pick_any.Exclude_keyofany.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofBlogModelDTO___": {
+				"properties": {
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"title": {
+						"type": "string"
+					},
+					"content": {
+						"type": "string"
+					},
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"user": {
+						"$ref": "#/components/schemas/UserModelDTO"
+					},
+					"imageURL": {
+						"type": "string"
+					},
+					"publishedDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"isPublished": {
+						"type": "boolean"
+					},
+					"tags": {
+						"items": {
+							"$ref": "#/components/schemas/TagModelDTO"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"updatedAt",
+					"id",
+					"createdAt",
+					"title",
+					"content",
+					"userId",
+					"isPublished"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofBlogModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofBlogModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_BlogModelDTO.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofBlogModelDTO_.imageURL-or-publishedDate.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofBlogModelDTO__"
+			},
+			"UpdateResponseContent_BlogModelDTO.never.imageURL-or-publishedDate_": {
+				"$ref": "#/components/schemas/TransformKeys_BlogModelDTO.Extract_never-or-UpdateResponseContentOmittedKeysT.keyofBlogModelDTO_.imageURL-or-publishedDate.never_"
+			},
+			"DataResponseBody_UpdateResponseContent_BlogModelDTO.never.imageURL-or-publishedDate_.Blog.UpdatedResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/UpdateResponseContent_BlogModelDTO.never.imageURL-or-publishedDate_"
+					},
+					"message": {
+						"$ref": "#/components/schemas/UpdatedResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_Blog_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"BlogUpdateResponse": {
+				"$ref": "#/components/schemas/DataResponseBody_UpdateResponseContent_BlogModelDTO.never.imageURL-or-publishedDate_.Blog.UpdatedResponseMessageT_",
+				"description": "Possible responses for {@link BlogController.updateBlog}"
+			},
+			"Pick_any.Exclude_keyofany.Extract_user-or-tags-or-UpdateRequestBodyOmittedKeysT.keyofBlogModelDTO___": {
+				"properties": {
+					"title": {
+						"type": "string"
+					},
+					"content": {
+						"type": "string"
+					},
+					"userId": {
+						"type": "number",
+						"format": "double"
+					},
+					"imageURL": {
+						"type": "string"
+					},
+					"publishedDate": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"isPublished": {
+						"type": "boolean"
+					}
+				},
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"Omit_any.Extract_user-or-tags-or-UpdateRequestBodyOmittedKeysT.keyofBlogModelDTO__": {
+				"$ref": "#/components/schemas/Pick_any.Exclude_keyofany.Extract_user-or-tags-or-UpdateRequestBodyOmittedKeysT.keyofBlogModelDTO___",
+				"description": "Construct a type with the properties of T except for those in type K."
+			},
+			"TransformKeys_Partial_BlogModelDTO_.Extract_user-or-tags-or-UpdateRequestBodyOmittedKeysT.keyofBlogModelDTO_.never.never_": {
+				"$ref": "#/components/schemas/Omit_any.Extract_user-or-tags-or-UpdateRequestBodyOmittedKeysT.keyofBlogModelDTO__"
+			},
+			"UpdateRequestBody_BlogModelDTO.user-or-tags.never_": {
+				"$ref": "#/components/schemas/TransformKeys_Partial_BlogModelDTO_.Extract_user-or-tags-or-UpdateRequestBodyOmittedKeysT.keyofBlogModelDTO_.never.never_",
+				"description": "Represents the {@link DataResponseBody} for a successful `update` route response"
+			},
+			"BlogUpdateRequest": {
+				"$ref": "#/components/schemas/UpdateRequestBody_BlogModelDTO.user-or-tags.never_",
+				"description": "Request body format for {@link BlogController.updateBlog}'s `blog` body parameter"
+			},
+			"DataResponseBody_DeletedResponseContent.Blog.DeletedResponseMessageT_": {
+				"description": "Represents the response body of a data response",
+				"properties": {
+					"data": {
+						"$ref": "#/components/schemas/DeletedResponseContent"
+					},
+					"message": {
+						"$ref": "#/components/schemas/DeletedResponseMessageT"
+					},
+					"metadata": {
+						"$ref": "#/components/schemas/MetaData_Blog_"
+					}
+				},
+				"required": [
+					"data",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DeleteResponseBody_Blog_": {
+				"$ref": "#/components/schemas/DataResponseBody_DeletedResponseContent.Blog.DeletedResponseMessageT_",
+				"description": "Represents the {@link DataResponseBody} for a successful `delete` route response"
+			},
+			"BlogDeleteResponse": {
+				"$ref": "#/components/schemas/DeleteResponseBody_Blog_",
+				"description": "Possible responses for {@link BlogController.deleteBlog}"
+			}
+		},
+		"securitySchemes": {
+			"api_key": {
+				"type": "apiKey",
+				"name": "api_key",
+				"in": "query"
+			},
+			"oauth2": {
+				"type": "oauth2",
+				"flows": {
+					"password": {
+						"tokenUrl": "/auth/login",
+						"scopes": {
+							"admin": "modify things",
+							"staff": "modify some things",
+							"user": "read things"
+						}
+					}
+				}
+			}
+		}
+	},
+	"info": {
+		"title": ""
+	},
+	"paths": {
+		"/users": {
+			"get": {
+				"operationId": "GetAllUsers",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserReadManyResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Retrieves a list of all users, matching the query parameters if provided.",
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "- Retrieve records starting from this offset",
+						"in": "query",
+						"name": "offset",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "- Retrieve up to this many records",
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "- Order records by this attribute",
+						"in": "query",
+						"name": "orderBy",
+						"required": false,
+						"schema": {
+							"$ref": "#/components/schemas/OrderByFieldValues"
+						}
+					},
+					{
+						"description": "- Stringified JSON where the keys represent a property of a user and values represent a text based filter for the property",
+						"in": "query",
+						"name": "filters",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"post": {
+				"operationId": "CreateUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserCreateResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Creates a new user",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"api_key": []
+					},
+					{
+						"oauth2": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"description": "- The posted body object, containing the creation attributes of UserModel",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserCreateRequest",
+								"description": "- The posted body object, containing the creation attributes of UserModel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/users/{id}": {
+			"get": {
+				"operationId": "GetUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserReadResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Retrieves the details of an existing user with a matching id",
+				"tags": [
+					"User"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "- The identifier of the user to get",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/AppModelIdT"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "UpdateUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserUpdateResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update a user with a matching id",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"api_key": []
+					},
+					{
+						"oauth2": [
+							"user"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The identifier of the user to update",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/AppModelIdT"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "- The posted body object, containing some or all modifiable attributes of UserModel",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserUpdateRequest",
+								"description": "- The posted body object, containing some or all modifiable attributes of UserModel"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserDeleteResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Delete the user with the matching id",
+				"tags": [
+					"User"
+				],
+				"security": [
+					{
+						"api_key": []
+					},
+					{
+						"oauth2": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The identifier of the user to delete",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/AppModelIdT"
+						}
+					},
+					{
+						"description": "- If true the user will actually be deleted from the database rather than a soft delete (handled by sequelize)",
+						"in": "query",
+						"name": "force",
+						"required": false,
+						"schema": {
+							"type": "boolean"
+						}
+					}
+				]
+			}
+		},
+		"/auth/login": {
+			"post": {
+				"operationId": "Login",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthLoginResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "This route handles auth login attempts",
+				"tags": [
+					"Auth"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"username": {
+										"type": "string",
+										"description": "- the OAuth2 username to try log in with, which is the email in this application"
+									},
+									"password": {
+										"type": "string",
+										"description": "- the password to try log in with"
+									}
+								},
+								"required": [
+									"username",
+									"password"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/auth/register": {
+			"post": {
+				"operationId": "Register",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthRegisterResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "This route handles auth registration attempts",
+				"tags": [
+					"Auth"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"description": "- The posted body object, containing the creation attributes of UserModel",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/AuthRegisterRequestBody",
+								"description": "- The posted body object, containing the creation attributes of UserModel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/tags": {
+			"get": {
+				"operationId": "GetAllTags",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/TagReadManyResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/TagNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Retrieves a list of all tags, matching the query parameters if provided.",
+				"tags": [
+					"Tag"
+				],
+				"security": [
+					{
+						"api_key": []
+					},
+					{
+						"oauth2": [
+							"admin",
+							"staff"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- Retrieve records starting from this offset",
+						"in": "query",
+						"name": "offset",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "- Retrieve up to this many records",
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "- Order records by this attribute",
+						"in": "query",
+						"name": "orderBy",
+						"required": false,
+						"schema": {
+							"$ref": "#/components/schemas/OrderByFieldValues"
+						}
+					},
+					{
+						"description": "- Stringified JSON where the keys represent a property of a tag and values represent a text based filter for the property",
+						"in": "query",
+						"name": "filters",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"post": {
+				"operationId": "CreateTag",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/TagCreateResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Creates a new tag",
+				"tags": [
+					"Tag"
+				],
+				"security": [
+					{
+						"api_key": []
+					},
+					{
+						"oauth2": [
+							"admin",
+							"staff"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"description": "- The posted body object, containing the creation attributes of TagModel",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/TagCreateRequest",
+								"description": "- The posted body object, containing the creation attributes of TagModel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/tags/{id}": {
+			"get": {
+				"operationId": "GetTag",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/TagReadResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/TagNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Retrieves the details of an existing tag with a matching id",
+				"tags": [
+					"Tag"
+				],
+				"security": [
+					{
+						"api_key": []
+					},
+					{
+						"oauth2": [
+							"admin",
+							"staff"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The identifier of the tag to get",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/AppModelIdT"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "UpdateTag",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/TagUpdateResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/TagNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update a tag with a matching id",
+				"tags": [
+					"Tag"
+				],
+				"security": [
+					{
+						"api_key": []
+					},
+					{
+						"oauth2": [
+							"admin",
+							"staff"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The identifier of the tag to update",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/AppModelIdT"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "- The posted body object, containing some or all modifiable attributes of TagModel",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/TagUpdateRequest",
+								"description": "- The posted body object, containing some or all modifiable attributes of TagModel"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteTag",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/TagDeleteResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/TagNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Delete the tag with the matching id",
+				"tags": [
+					"Tag"
+				],
+				"security": [
+					{
+						"api_key": []
+					},
+					{
+						"oauth2": [
+							"admin",
+							"staff"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The identifier of the tag to delete",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/AppModelIdT"
+						}
+					},
+					{
+						"description": "- If true the tag will actually be deleted from the database rather than a soft delete (handled by sequelize)",
+						"in": "query",
+						"name": "force",
+						"required": false,
+						"schema": {
+							"type": "boolean"
+						}
+					}
+				]
+			}
+		},
+		"/roles": {
+			"get": {
+				"operationId": "GetAllRoles",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RoleReadManyResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RoleNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Retrieves a list of all roles, matching the query parameters if provided.",
+				"tags": [
+					"Role"
+				],
+				"security": [
+					{
+						"api_key": []
+					},
+					{
+						"oauth2": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- Retrieve records starting from this offset",
+						"in": "query",
+						"name": "offset",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "- Retrieve up to this many records",
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "- Order records by this attribute",
+						"in": "query",
+						"name": "orderBy",
+						"required": false,
+						"schema": {
+							"$ref": "#/components/schemas/OrderByFieldValues"
+						}
+					},
+					{
+						"description": "- Stringified JSON where the keys represent a property of a role and values represent a text based filter for the property",
+						"in": "query",
+						"name": "filters",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"post": {
+				"operationId": "CreateRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RoleCreateResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Creates a new role",
+				"tags": [
+					"Role"
+				],
+				"security": [
+					{
+						"api_key": []
+					},
+					{
+						"oauth2": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"description": "- The posted body object, containing the creation attributes of RoleModel",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RoleCreateRequest",
+								"description": "- The posted body object, containing the creation attributes of RoleModel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/roles/{id}": {
+			"get": {
+				"operationId": "GetRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RoleReadResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RoleNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Retrieves the details of an existing role with a matching id",
+				"tags": [
+					"Role"
+				],
+				"security": [
+					{
+						"api_key": []
+					},
+					{
+						"oauth2": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The identifier of the role to get",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/AppModelIdT"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "UpdateRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RoleUpdateResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RoleNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update a role with a matching id",
+				"tags": [
+					"Role"
+				],
+				"security": [
+					{
+						"api_key": []
+					},
+					{
+						"oauth2": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The identifier of the role to update",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/AppModelIdT"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "- The posted body object, containing some or all modifiable attributes of RoleModel",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RoleUpdateRequest",
+								"description": "- The posted body object, containing some or all modifiable attributes of RoleModel"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteRole",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RoleDeleteResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RoleNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Delete the role with the matching id",
+				"tags": [
+					"Role"
+				],
+				"security": [
+					{
+						"api_key": []
+					},
+					{
+						"oauth2": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The identifier of the role to delete",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/AppModelIdT"
+						}
+					},
+					{
+						"description": "- If true the role will actually be deleted from the database rather than a soft delete (handled by sequelize)",
+						"in": "query",
+						"name": "force",
+						"required": false,
+						"schema": {
+							"type": "boolean"
+						}
+					}
+				]
+			}
+		},
+		"/feedbacks": {
+			"get": {
+				"operationId": "GetAllFeedbacks",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/FeedbackReadManyResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/FeedbackNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Retrieves a list of all feedbacks, matching the query parameters if provided.",
+				"tags": [
+					"Feedback"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "- Retrieve records starting from this offset",
+						"in": "query",
+						"name": "offset",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "- Retrieve up to this many records",
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "- Order records by this attribute",
+						"in": "query",
+						"name": "orderBy",
+						"required": false,
+						"schema": {
+							"$ref": "#/components/schemas/OrderByFieldValues"
+						}
+					},
+					{
+						"description": "- Stringified JSON where the keys represent a property of a feedback and values represent a text based filter for the property",
+						"in": "query",
+						"name": "filters",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"post": {
+				"operationId": "CreateFeedback",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/FeedbackCreateResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Creates a new feedback",
+				"tags": [
+					"Feedback"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"description": "- The posted body object, containing the creation attributes of FeedbackModel",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/FeedbackCreateRequest",
+								"description": "- The posted body object, containing the creation attributes of FeedbackModel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/feedbacks/{id}": {
+			"get": {
+				"operationId": "GetFeedback",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/FeedbackReadResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/FeedbackNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Retrieves the details of an existing feedback with a matching id",
+				"tags": [
+					"Feedback"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "- The identifier of the feedback to get",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/AppModelIdT"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "UpdateFeedback",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/FeedbackUpdateResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/FeedbackNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update a feedback with a matching id",
+				"tags": [
+					"Feedback"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "- The identifier of the feedback to update",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/AppModelIdT"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "- The posted body object, containing some or all modifiable attributes of FeedbackModel",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/FeedbackUpdateRequest",
+								"description": "- The posted body object, containing some or all modifiable attributes of FeedbackModel"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteFeedback",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/FeedbackDeleteResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/FeedbackNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Delete the feedback with the matching id",
+				"tags": [
+					"Feedback"
+				],
+				"security": [
+					{
+						"api_key": []
+					},
+					{
+						"oauth2": [
+							"admin"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The identifier of the feedback to delete",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/AppModelIdT"
+						}
+					},
+					{
+						"description": "- If true the feedback will actually be deleted from the database rather than a soft delete (handled by sequelize)",
+						"in": "query",
+						"name": "force",
+						"required": false,
+						"schema": {
+							"type": "boolean"
+						}
+					}
+				]
+			}
+		},
+		"/bookingTypes": {
+			"get": {
+				"operationId": "GetAllBookingTypes",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BookingTypeReadManyResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BookingTypeNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Retrieves a list of all bookingTypes, matching the query parameters if provided.",
+				"tags": [
+					"BookingType"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "- Retrieve records starting from this offset",
+						"in": "query",
+						"name": "offset",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "- Retrieve up to this many records",
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "- Order records by this attribute",
+						"in": "query",
+						"name": "orderBy",
+						"required": false,
+						"schema": {
+							"$ref": "#/components/schemas/OrderByFieldValues"
+						}
+					},
+					{
+						"description": "- Stringified JSON where the keys represent a property of a bookingType and values represent a text based filter for the property",
+						"in": "query",
+						"name": "filters",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"post": {
+				"operationId": "CreateBookingType",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BookingTypeCreateResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Creates a new bookingType",
+				"tags": [
+					"BookingType"
+				],
+				"security": [
+					{
+						"api_key": []
+					},
+					{
+						"oauth2": [
+							"user"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"description": "- The posted body object, containing the creation attributes of BookingTypeModel",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/BookingTypeCreateRequest",
+								"description": "- The posted body object, containing the creation attributes of BookingTypeModel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/bookingTypes/{id}": {
+			"get": {
+				"operationId": "GetBookingType",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BookingTypeReadResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BookingTypeNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Retrieves the details of an existing bookingType with a matching id",
+				"tags": [
+					"BookingType"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "- The identifier of the bookingType to get",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/AppModelIdT"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "UpdateBookingType",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BookingTypeUpdateResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BookingTypeNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update a bookingType with a matching id",
+				"tags": [
+					"BookingType"
+				],
+				"security": [
+					{
+						"api_key": []
+					},
+					{
+						"oauth2": [
+							"user"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The identifier of the bookingType to update",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/AppModelIdT"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "- The posted body object, containing some or all modifiable attributes of BookingTypeModel",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/BookingTypeUpdateRequest",
+								"description": "- The posted body object, containing some or all modifiable attributes of BookingTypeModel"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteBookingType",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BookingTypeDeleteResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BookingTypeNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Delete the bookingType with the matching id",
+				"tags": [
+					"BookingType"
+				],
+				"security": [
+					{
+						"api_key": []
+					},
+					{
+						"oauth2": [
+							"user"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The identifier of the bookingType to delete",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/AppModelIdT"
+						}
+					},
+					{
+						"description": "- If true the bookingType will actually be deleted from the database rather than a soft delete (handled by sequelize)",
+						"in": "query",
+						"name": "force",
+						"required": false,
+						"schema": {
+							"type": "boolean"
+						}
+					}
+				]
+			}
+		},
+		"/bookings": {
+			"get": {
+				"operationId": "GetAllBookings",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BookingReadManyResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BookingNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Retrieves a list of all bookings, matching the query parameters if provided.",
+				"tags": [
+					"Booking"
+				],
+				"security": [
+					{
+						"api_key": []
+					},
+					{
+						"oauth2": [
+							"user"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- Retrieve records starting from this offset",
+						"in": "query",
+						"name": "offset",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "- Retrieve up to this many records",
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "- Order records by this attribute",
+						"in": "query",
+						"name": "orderBy",
+						"required": false,
+						"schema": {
+							"$ref": "#/components/schemas/OrderByFieldValues"
+						}
+					},
+					{
+						"description": "- Stringified JSON where the keys represent a property of a booking and values represent a text based filter for the property",
+						"in": "query",
+						"name": "filters",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"post": {
+				"operationId": "CreateBooking",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BookingCreateResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Creates a new booking",
+				"tags": [
+					"Booking"
+				],
+				"security": [
+					{
+						"api_key": []
+					},
+					{
+						"oauth2": [
+							"user"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"description": "- The posted body object, containing the creation attributes of BookingModel",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/BookingCreateRequest",
+								"description": "- The posted body object, containing the creation attributes of BookingModel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/bookings/{id}": {
+			"get": {
+				"operationId": "GetBooking",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BookingReadResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BookingNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Retrieves the details of an existing booking with a matching id",
+				"tags": [
+					"Booking"
+				],
+				"security": [
+					{
+						"api_key": []
+					},
+					{
+						"oauth2": [
+							"user"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The identifier of the booking to get",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/AppModelIdT"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "UpdateBooking",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BookingUpdateResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BookingNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update a booking with a matching id",
+				"tags": [
+					"Booking"
+				],
+				"security": [
+					{
+						"api_key": []
+					},
+					{
+						"oauth2": [
+							"user"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The identifier of the booking to update",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/AppModelIdT"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "- The posted body object, containing some or all modifiable attributes of BookingModel",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/BookingUpdateRequest",
+								"description": "- The posted body object, containing some or all modifiable attributes of BookingModel"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteBooking",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BookingDeleteResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BookingNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Delete the booking with the matching id",
+				"tags": [
+					"Booking"
+				],
+				"security": [
+					{
+						"api_key": []
+					},
+					{
+						"oauth2": [
+							"user"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The identifier of the booking to delete",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/AppModelIdT"
+						}
+					},
+					{
+						"description": "- If true the booking will actually be deleted from the database rather than a soft delete (handled by sequelize)",
+						"in": "query",
+						"name": "force",
+						"required": false,
+						"schema": {
+							"type": "boolean"
+						}
+					}
+				]
+			}
+		},
+		"/blogs": {
+			"get": {
+				"operationId": "GetAllBlogs",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BlogReadManyResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BlogNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Retrieves a list of all blogs, matching the query parameters if provided.",
+				"tags": [
+					"Blog"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "- Retrieve records starting from this offset",
+						"in": "query",
+						"name": "offset",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "- Retrieve up to this many records",
+						"in": "query",
+						"name": "limit",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"description": "- Order records by this attribute",
+						"in": "query",
+						"name": "orderBy",
+						"required": false,
+						"schema": {
+							"$ref": "#/components/schemas/OrderByFieldValues"
+						}
+					},
+					{
+						"description": "- Stringified JSON where the keys represent a property of a blog and values represent a text based filter for the property",
+						"in": "query",
+						"name": "filters",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
+			"post": {
+				"operationId": "CreateBlog",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BlogCreateResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Creates a new blog",
+				"tags": [
+					"Blog"
+				],
+				"security": [
+					{
+						"api_key": []
+					},
+					{
+						"oauth2": [
+							"admin",
+							"staff"
+						]
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"description": "- The posted body object, containing the creation attributes of BlogModel",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/BlogCreateRequest",
+								"description": "- The posted body object, containing the creation attributes of BlogModel"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/blogs/{id}": {
+			"get": {
+				"operationId": "GetBlog",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BlogReadResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BlogNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Retrieves the details of an existing blog with a matching id",
+				"tags": [
+					"Blog"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "- The identifier of the blog to get",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/AppModelIdT"
+						}
+					}
+				]
+			},
+			"patch": {
+				"operationId": "UpdateBlog",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BlogUpdateResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BlogNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update a blog with a matching id",
+				"tags": [
+					"Blog"
+				],
+				"security": [
+					{
+						"api_key": []
+					},
+					{
+						"oauth2": [
+							"admin",
+							"staff"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The identifier of the blog to update",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/AppModelIdT"
+						}
+					}
+				],
+				"requestBody": {
+					"description": "- The posted body object, containing some or all modifiable attributes of BlogModel",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/BlogUpdateRequest",
+								"description": "- The posted body object, containing some or all modifiable attributes of BlogModel"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteBlog",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BlogDeleteResponse"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Not Authenticated",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Not Authorized",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuthErrorResponseBody"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/BlogNotFoundResponseBody"
+								}
+							}
+						}
+					},
+					"422": {
+						"description": "Validation Failed",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ValidationErrorResponseBody"
+								}
+							}
+						}
+					}
+				},
+				"description": "Delete the blog with the matching id",
+				"tags": [
+					"Blog"
+				],
+				"security": [
+					{
+						"api_key": []
+					},
+					{
+						"oauth2": [
+							"admin",
+							"staff"
+						]
+					}
+				],
+				"parameters": [
+					{
+						"description": "- The identifier of the blog to delete",
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/AppModelIdT"
+						}
+					},
+					{
+						"description": "- If true the blog will actually be deleted from the database rather than a soft delete (handled by sequelize)",
+						"in": "query",
+						"name": "force",
+						"required": false,
+						"schema": {
+							"type": "boolean"
+						}
+					}
+				]
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	],
+	"basePath": "/",
+	"specFileBaseName": "openapi",
+	"outputDirectory": "./src/tsoa-build",
+	"specVersion": 3,
+	"securityDefinitions": {
+		"api_key": {
+			"type": "apiKey",
+			"name": "api_key",
+			"in": "query"
+		},
+		"oauth2": {
+			"type": "oauth2",
+			"tokenUrl": "/auth/login",
+			"flow": "password",
+			"scopes": {
+				"admin": "modify things",
+				"staff": "modify some things",
+				"user": "read things"
+			}
+		}
+	}
+}

@@ -1,0 +1,61 @@
+/** Utility Classes **/
+.flex-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    height: auto;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    height: auto;
+    width: auto;
+    min-width: 32px;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.align-items-start {
+    align-items: flex-start;
+}
+
+.justify-content-start {
+    justify-content: flex-start;
+}
+
+.justify-content-center {
+    justify-content: center;
+}
+
+.flex-gap-10 {
+    gap: 10px;
+}
+
+.flex-gap-20 {
+    gap: 20px;
+}
+
+.flex-gap-50 {
+    gap: 50px;
+}
+
+.flex-grow {
+    flex-grow: 1;
+    /* flex-shrink: inherit */
+    /* flex-basis: inherit */
+}
+
+.flex-top {
+    align-self: flex-start;
+}
+
+.float-left {
+    float: left;
+}

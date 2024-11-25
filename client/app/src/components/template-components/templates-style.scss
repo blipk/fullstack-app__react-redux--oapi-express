@@ -1,0 +1,134 @@
+/** BlogView.tsx - Public Single Page */
+.blog-view {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    height: 100%;
+    padding: 20px 0 0 0;
+
+    .blog-view-header {
+        padding-bottom: 12px;
+
+        .blog-view-navigation {
+            position: absolute;
+            top: 5em;
+            left: 4em;
+
+            button {
+                background: none;
+                border: none;
+            }
+
+            button:hover {
+                color: orangered;
+                translate: -1px 0px;
+            }
+        }
+    }
+
+    .blog-content {
+        overflow: auto;
+        padding: 0 50px 0 50px;
+    }
+}
+
+/** BlogsDisplay.tsx & BlogsDisplayItem.tsx - Public Overview Page */
+.blogs-display {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    width: 100%;
+
+    margin-bottom: 40px;
+
+    .blogs-display-item {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        border: 2px solid gainsboro;
+        border-radius: 10px;
+
+        width: auto;
+        width: 25vw;
+        max-width: 25vw;
+        height: 44vh;
+        max-height: 44vh;
+
+        margin: 0 10px 0 10px;
+
+        * {
+            // overflow: hidden;
+            // white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .blogs-display-item-body {
+            height: 44vh;
+            max-height: 44vh;
+        }
+
+        .blog-content-container {
+            .blog-content {
+                white-space: wrap;
+                text-overflow: ellipsis;
+            }
+
+            .blog-markdown {
+            }
+        }
+    }
+}
+
+/** BlogsList.tsx & BlogsListItem.tsx - Admin Page */
+.blogs-list-wrapper {
+    padding: 0 100px 0 100px;
+    .blogs-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+
+        .blogs-list-item-container {
+            .blogs-list-item-header h1 {
+                margin: 0;
+            }
+
+            .blogs-list-item {
+                display: flex;
+            }
+        }
+    }
+}
+
+/** Shared */
+.blog-markdown {
+    text-overflow: ellipsis;
+    p {
+        text-align: left;
+        padding-bottom: 6px;
+        text-overflow: ellipsis;
+    }
+}
+
+.blog-image {
+    max-width: 420px;
+    border-radius: 18px;
+    margin-top: 5px;
+    margin-right: 12px;
+
+    height: auto;
+}
+
+.blog-image-preview {
+    max-width: 200px;
+    border-radius: 18px;
+    margin-top: 5px;
+    margin-right: 12px;
+
+    height: auto;
+}

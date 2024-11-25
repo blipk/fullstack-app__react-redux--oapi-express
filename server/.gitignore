@@ -1,0 +1,7 @@
+# app databases
+*.sqlite
+*.db
+
+# app secrets
+*.env
+!sample.env

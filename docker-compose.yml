@@ -1,0 +1,74 @@
+
+services:
+  nginx:
+    image: docker.io/nginx:latest
+    networks:
+      - webhost
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./nginx-conf/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx-conf/templates/:/etc/nginx/templates/
+      - ./nginx-conf/snippets/:/etc/nginx/snippets/
+      - ./nginx-conf/certs/:/etc/nginx/certs/
+      - vite_build:/var/www/html
+    restart: unless-stopped
+    environment:
+      API_PORT: ${PORT}
+
+
+  server:
+    build: server
+    networks:
+      - webhost
+    # ports:
+    #   - ${PORT}:${PORT} # This exposes it outside of the nginx proxy
+    restart: unless-stopped
+    volumes:
+      - ./server/app:/app
+    environment:
+      #Dev
+      DEV_MODE: ${DEV_MODE}
+      DEBUG_MODE: ${DEBUG_MODE}
+      DEV_INIT_DB: ${DEV_INIT_DB}
+
+      #App
+      PORT: ${PORT}
+
+      #DB
+      DB_LOG_LEVEL: ${DB_LOG_LEVEL}
+      DB_STORAGE_DIR: ${DB_STORAGE_DIR}
+      DB_STORAGE_NAME: ${DB_STORAGE_NAME}
+      DB_CONNECTION_TIMEOUT: ${DB_CONNECTION_TIMEOUT}
+      DB_CONNECTION_MAX_ATTEMPTS: ${DB_CONNECTION_MAX_ATTEMPTS}
+      DB_CONNECTION_RETRY_INTERVAL: ${DB_CONNECTION_RETRY_INTERVAL}
+
+      #Auth
+      AUTH_JWT_SECRET: ${AUTH_JWT_SECRET}
+      AUTH_JWT_ISSUER: ${AUTH_JWT_ISSUER}
+
+
+  client:
+    build: client
+    restart: unless-stopped
+    depends_on:
+     - server
+    environment:
+      VITE_API_HOST: "${VITE_API_HOST}"
+      VITE_API_PORT: "${VITE_API_PORT}"       # Should be same port as frontend in nginx (80)
+      VITE_API_PATH: "${VITE_API_PATH}"       # Must match the location path set up in nginx.conf
+
+      VITE_DEV_MODE: ${VITE_DEV_MODE}
+      VITE_DEBUG_MODE: ${VITE_DEBUG_MODE}
+    volumes:
+      - ./client/app:/app
+      - /app/node_modules
+      - vite_build:/app/dist
+
+volumes:
+  vite_build:
+
+networks:
+  webhost:
+    driver: bridge
